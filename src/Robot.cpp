@@ -4,6 +4,7 @@
 #include "CommunicationService.hpp"
 #include "Goal.hpp"
 #include "LaserDistanceSensor.hpp"
+#include "LidarSensor.hpp"
 #include "Logger.hpp"
 #include "MainApplication.hpp"
 #include "MathUtils.hpp"
@@ -48,8 +49,11 @@ namespace Model
 								driving(false),
 								communicating(false)
 	{
-		std::shared_ptr< AbstractSensor > laserSensor = std::make_shared<LaserDistanceSensor>( *this);
-		attachSensor( laserSensor);
+		std::shared_ptr<AbstractSensor> laserSensor = std::make_shared<LaserDistanceSensor>(*this);
+		attachSensor(laserSensor);
+
+		std::shared_ptr<AbstractSensor> lidarSensor = std::make_shared<LidarSensor>(*this);
+		attachSensor(lidarSensor);
 
 		// We use the real position for starters, not an estimated position.
 		startPosition = position;
@@ -468,11 +472,16 @@ namespace Model
 						// warning: expression with side effects will be evaluated despite being used as an operand to 'typeid'
 						const AbstractPercept& tempAbstractPercept{*percept.value().get()};
 
-						if( typeid(tempAbstractPercept) == typeid(DistancePercept)) // single percept, this comes from the laser
+						if(typeid(tempAbstractPercept) == typeid(DistancePercept)) // single percept, this comes from the laser
 						{
 							DistancePercept* distancePercept = dynamic_cast<DistancePercept*>(percept.value().get());
 							currentRadarPointCloud.push_back(*distancePercept);
-						}else
+						}
+						else if(typeid(tempAbstractPercept) == typeid(DistancePercepts))
+						{
+							//TODO: does nothing for now
+						}
+						else
 						{
 							Application::Logger::log(std::string("Unknown type of percept:") + typeid(tempAbstractPercept).name());
 						}
