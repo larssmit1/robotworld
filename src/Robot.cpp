@@ -5,6 +5,7 @@
 #include "Goal.hpp"
 #include "LaserDistanceSensor.hpp"
 #include "LidarSensor.hpp"
+#include "CompassSensor.hpp"
 #include "Logger.hpp"
 #include "MainApplication.hpp"
 #include "MathUtils.hpp"
@@ -54,6 +55,9 @@ namespace Model
 
 		std::shared_ptr<AbstractSensor> lidarSensor = std::make_shared<LidarSensor>(*this);
 		attachSensor(lidarSensor);
+
+		std::shared_ptr<CompassSensor> compassSensor = std::make_shared<CompassSensor>(*this);
+		attachSensor(compassSensor);
 
 		// We use the real position for starters, not an estimated position.
 		startPosition = position;

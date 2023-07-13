@@ -1,43 +1,20 @@
-#ifndef LIDARSENSOR_HPP_
-#define LIDARSENSOR_HPP_
+#ifndef COMPASSSENSOR_HPP_
+#define COMPASSSENSOR_HPP_
 
 #include "Config.hpp"
 #include "AbstractSensor.hpp"
-#include "DistancePercepts.hpp"
+#include "OrientationPercept.hpp"
 
 namespace Model
 {
-	/**
-	 * Compile time configurable length of the laser beam
-	 */
-	const short int lidarBeamLength = 1024;
-
 	class Robot;
 	typedef std::shared_ptr<Robot> RobotPtr;
 
-	class LidarSensor : public AbstractSensor
+	class CompassSensor : public AbstractSensor
 	{
 		public:
-			/**
-			 * @brief Construct a new Lidar Sensor object
-			 * 
-			 * @param aRobot The robot to whitch the lidar is connected
-			 */
-			explicit LidarSensor(Robot& aRobot);
-
-			/**
-			 * @brief Returns the distance from the robot in all directions in which the beam collided
-			 * 
-			 * @return std::shared_ptr<AbstractStimulus> 
-			 */
+			explicit CompassSensor(Robot& aRobot);
 			virtual std::shared_ptr<AbstractStimulus> getStimulus() const override;
-
-			/**
-			 * @brief Returns the points where the lidar stopped
-			 * 
-			 * @param anAbstractStimulus 
-			 * @return std::shared_ptr<AbstractPercept> 
-			 */
 			virtual std::shared_ptr<AbstractPercept> getPerceptFor(std::shared_ptr<AbstractStimulus> anAbstractStimulus) const override;
 
 			/**
@@ -45,7 +22,7 @@ namespace Model
 			 * 
 			 * @param aStdDev 
 			 */
-			static void setStdDev(double aStdDev){LidarSensor::stddev = aStdDev;}
+			static void setStdDev(double aStdDev){CompassSensor::stddev = aStdDev;}
 
 			/**
 			 * @brief Get the Std Dev object
@@ -70,11 +47,10 @@ namespace Model
 		protected:
 		private:
 			/**
-			 * Standard deviation of the lidar per 10 pixels
+			 * Standard deviation of the compass in degrees
 			 */
 			static double stddev;
-			static double beamAngle;
 	};
 } // namespace Model
 
-#endif /* LIDARSENSOR_HPP_ */
+#endif /* COMPASSSENSOR_HPP_ */

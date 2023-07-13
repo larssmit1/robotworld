@@ -114,6 +114,7 @@ am_robotworld_OBJECTS = robotworld-AbstractActuator.$(OBJEXT) \
 	robotworld-Goal.$(OBJEXT) robotworld-GoalShape.$(OBJEXT) \
 	robotworld-LaserDistanceSensor.$(OBJEXT) \
 	robotworld-LidarSensor.$(OBJEXT) \
+	robotworld-CompassSensor.$(OBJEXT) \
 	robotworld-LineShape.$(OBJEXT) robotworld-Logger.$(OBJEXT) \
 	robotworld-LogTextCtrl.$(OBJEXT) robotworld-Main.$(OBJEXT) \
 	robotworld-MainApplication.$(OBJEXT) \
@@ -401,6 +402,7 @@ robotworld_SOURCES = AbstractActuator.cpp	\
 						GoalShape.cpp	\
 						LaserDistanceSensor.cpp	\
 						LidarSensor.cpp \
+						CompassSensor.cpp \
 						LineShape.cpp	\
 						Logger.cpp	\
 						LogTextCtrl.cpp	\
@@ -552,6 +554,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-AbstractSensor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-BoundedVector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-CommunicationService.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-CompassSensor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-FileTraceFunction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Goal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-GoalShape.Po@am__quote@
@@ -765,6 +768,20 @@ robotworld-LidarSensor.obj: LidarSensor.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='LidarSensor.cpp' object='robotworld-LidarSensor.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-LidarSensor.obj `if test -f 'LidarSensor.cpp'; then $(CYGPATH_W) 'LidarSensor.cpp'; else $(CYGPATH_W) '$(srcdir)/LidarSensor.cpp'; fi`
+
+robotworld-CompassSensor.o: CompassSensor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-CompassSensor.o -MD -MP -MF $(DEPDIR)/robotworld-CompassSensor.Tpo -c -o robotworld-CompassSensor.o `test -f 'CompassSensor.cpp' || echo '$(srcdir)/'`CompassSensor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-CompassSensor.Tpo $(DEPDIR)/robotworld-CompassSensor.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CompassSensor.cpp' object='robotworld-CompassSensor.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-CompassSensor.o `test -f 'CompassSensor.cpp' || echo '$(srcdir)/'`CompassSensor.cpp
+
+robotworld-CompassSensor.obj: CompassSensor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-CompassSensor.obj -MD -MP -MF $(DEPDIR)/robotworld-CompassSensor.Tpo -c -o robotworld-CompassSensor.obj `if test -f 'CompassSensor.cpp'; then $(CYGPATH_W) 'CompassSensor.cpp'; else $(CYGPATH_W) '$(srcdir)/CompassSensor.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-CompassSensor.Tpo $(DEPDIR)/robotworld-CompassSensor.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CompassSensor.cpp' object='robotworld-CompassSensor.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-CompassSensor.obj `if test -f 'CompassSensor.cpp'; then $(CYGPATH_W) 'CompassSensor.cpp'; else $(CYGPATH_W) '$(srcdir)/CompassSensor.cpp'; fi`
 
 robotworld-LineShape.o: LineShape.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-LineShape.o -MD -MP -MF $(DEPDIR)/robotworld-LineShape.Tpo -c -o robotworld-LineShape.o `test -f 'LineShape.cpp' || echo '$(srcdir)/'`LineShape.cpp
