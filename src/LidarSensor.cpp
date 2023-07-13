@@ -9,6 +9,8 @@
 
 #include <random>
 
+#define PI 3.14159265359
+
 namespace Model
 {
 	/* static */ double LidarSensor::stddev = 10.0;
@@ -31,7 +33,7 @@ namespace Model
 
 			for(int i = 0; i <= 360 / beamAngle; i++)
 			{
-				double angle = beamAngle * i;
+				double angle = (beamAngle * i * PI) / 180;
 				double distance = -1;
 
 				std::vector<WallPtr> walls = RobotWorld::getRobotWorld().getWalls();
@@ -48,7 +50,11 @@ namespace Model
 					if(interSection != wxDefaultPosition)
 					{
 						double new_distance = Utils::Shape2DUtils::distance(robotLocation, interSection);
-						if(new_distance > distance)
+						if(distance == -1)
+						{
+							distance = new_distance;
+						}
+						else if(new_distance < distance)
 						{
 							distance = new_distance;
 						}
@@ -58,9 +64,9 @@ namespace Model
 				if(distance != -1)
 				{
 					measurements.push_back(DistanceStimulus(angle, distance));
-					// Application::Logger::log(__PRETTY_FUNCTION__ +
-					// 						std::string(": angle ") + std::to_string(angle) +
-					// 						std::string(", distance ") + std::to_string(distance));
+					Application::Logger::log(__PRETTY_FUNCTION__ +
+											std::string(": angle ") + std::to_string(beamAngle * i) +
+											std::string(", distance ") + std::to_string(distance));
 				}
 			}
 			return std::make_shared<DistanceStimuli>(measurements);
