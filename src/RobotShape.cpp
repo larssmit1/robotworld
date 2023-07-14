@@ -93,6 +93,8 @@ namespace View
 		drawRobot( dc);
 
 		drawLaser( dc);
+
+		drawLidar( dc);
 	}
 	/**
 	 *
@@ -258,6 +260,18 @@ namespace View
 				dc.SetPen( wxPen(  "RED", borderWidth, wxPENSTYLE_SOLID));
 				dc.DrawCircle( d.point, 1);
 			}
+		}
+	}
+
+	void RobotShape::drawLidar(wxDC& dc)
+	{
+		Model::PointCloud pointcloud = getRobot()->currentLidarPointcloud;
+		wxPoint robotposition = getRobot()->getPosition();
+
+		for(const Model::DistancePercept percept : pointcloud)
+		{
+			dc.SetPen( wxPen(  "BLUE", 1, wxPENSTYLE_SOLID));
+			dc.DrawLine(centre.x, centre.y, percept.point.x, percept.point.y);
 		}
 	}
 } // namespace View

@@ -64,9 +64,9 @@ namespace Model
 				if(distance != -1)
 				{
 					measurements.push_back(DistanceStimulus(angle, distance));
-					Application::Logger::log(__PRETTY_FUNCTION__ +
-											std::string(": angle ") + std::to_string(beamAngle * i) +
-											std::string(", distance ") + std::to_string(distance));
+					// Application::Logger::log(__PRETTY_FUNCTION__ +
+					// 						std::string(": angle ") + std::to_string(beamAngle * i) +
+					// 						std::string(", distance ") + std::to_string(distance));
 				}
 			}
 			return std::make_shared<DistanceStimuli>(measurements);

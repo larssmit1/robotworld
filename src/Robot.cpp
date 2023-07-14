@@ -455,7 +455,7 @@ namespace Model
 			startPosition = position;
 
 			unsigned pathPoint = 0;
-			while (position.x > 0 && position.x < 500 && position.y > 0 && position.y < 500 && pathPoint < path.size()) // @suppress("Avoid magic numbers")
+			while (position.x > 0 && position.x < 1024 && position.y > 0 && position.y < 1024 && pathPoint < path.size()) // @suppress("Avoid magic numbers")
 			{
 				// Do the update
 				const PathAlgorithm::Vertex& vertex = path[pathPoint+=static_cast<unsigned int>(speed)];
@@ -482,6 +482,11 @@ namespace Model
 							currentRadarPointCloud.push_back(*distancePercept);
 						}
 						else if(typeid(tempAbstractPercept) == typeid(DistancePercepts))
+						{
+							DistancePercepts* distancePercepts = dynamic_cast<DistancePercepts*>(percept.value().get());
+							currentLidarPointcloud = distancePercepts->pointCloud;
+						}
+						else if(typeid(tempAbstractPercept) == typeid(OrientationPercept))
 						{
 							//TODO: does nothing for now
 						}

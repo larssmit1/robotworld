@@ -256,6 +256,8 @@ namespace Model
 			PointCloud currentRadarPointCloud; // The latest radar point cloud
 			//@}
 
+			PointCloud currentLidarPointcloud;
+
 		protected:
 			/**
 			 *
