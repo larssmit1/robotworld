@@ -13,8 +13,26 @@ namespace Model
 	class CompassSensor : public AbstractSensor
 	{
 		public:
+			/**
+			 * @brief Construct a new Compass Sensor object
+			 * 
+			 * @param aRobot 
+			 */
 			explicit CompassSensor(Robot& aRobot);
+
+			/**
+			 * @brief Returns the angle in radians of the robot
+			 * 
+			 * @return std::shared_ptr<AbstractStimulus> 
+			 */
 			virtual std::shared_ptr<AbstractStimulus> getStimulus() const override;
+
+			/**
+			 * @brief Returns the orientation in degrees of the robot
+			 * 
+			 * @param anAbstractStimulus 
+			 * @return std::shared_ptr<AbstractPercept> 
+			 */
 			virtual std::shared_ptr<AbstractPercept> getPerceptFor(std::shared_ptr<AbstractStimulus> anAbstractStimulus) const override;
 
 			/**

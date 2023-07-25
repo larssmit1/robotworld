@@ -258,6 +258,8 @@ namespace Model
 
 			PointCloud currentLidarPointcloud;
 
+			std::vector<wxPoint> passedPoints;
+
 		protected:
 			/**
 			 *

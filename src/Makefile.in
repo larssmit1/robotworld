@@ -125,6 +125,7 @@ am_robotworld_OBJECTS = robotworld-AbstractActuator.$(OBJEXT) \
 	robotworld-NotificationHandler.$(OBJEXT) \
 	robotworld-Notifier.$(OBJEXT) robotworld-ObjectId.$(OBJEXT) \
 	robotworld-Observer.$(OBJEXT) \
+	robotworld-OdometerSensor.$(OBJEXT) \
 	robotworld-RectangleShape.$(OBJEXT) robotworld-Robot.$(OBJEXT) \
 	robotworld-RobotShape.$(OBJEXT) \
 	robotworld-RobotWorld.$(OBJEXT) \
@@ -416,6 +417,7 @@ robotworld_SOURCES = AbstractActuator.cpp	\
 						Notifier.cpp	\
 						ObjectId.cpp	\
 						Observer.cpp	\
+						OdometerSensor.cpp \
 						RectangleShape.cpp	\
 						Robot.cpp	\
 						RobotShape.cpp	\
@@ -573,6 +575,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Notifier.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-ObjectId.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Observer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-OdometerSensor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-RectangleShape.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Robot.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-RobotShape.Po@am__quote@
@@ -964,6 +967,20 @@ robotworld-Observer.obj: Observer.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Observer.cpp' object='robotworld-Observer.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-Observer.obj `if test -f 'Observer.cpp'; then $(CYGPATH_W) 'Observer.cpp'; else $(CYGPATH_W) '$(srcdir)/Observer.cpp'; fi`
+
+robotworld-OdometerSensor.o: OdometerSensor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-OdometerSensor.o -MD -MP -MF $(DEPDIR)/robotworld-OdometerSensor.Tpo -c -o robotworld-OdometerSensor.o `test -f 'OdometerSensor.cpp' || echo '$(srcdir)/'`OdometerSensor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-OdometerSensor.Tpo $(DEPDIR)/robotworld-OdometerSensor.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='OdometerSensor.cpp' object='robotworld-OdometerSensor.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-OdometerSensor.o `test -f 'OdometerSensor.cpp' || echo '$(srcdir)/'`OdometerSensor.cpp
+
+robotworld-OdometerSensor.obj: OdometerSensor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-OdometerSensor.obj -MD -MP -MF $(DEPDIR)/robotworld-OdometerSensor.Tpo -c -o robotworld-OdometerSensor.obj `if test -f 'OdometerSensor.cpp'; then $(CYGPATH_W) 'OdometerSensor.cpp'; else $(CYGPATH_W) '$(srcdir)/OdometerSensor.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-OdometerSensor.Tpo $(DEPDIR)/robotworld-OdometerSensor.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='OdometerSensor.cpp' object='robotworld-OdometerSensor.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-OdometerSensor.obj `if test -f 'OdometerSensor.cpp'; then $(CYGPATH_W) 'OdometerSensor.cpp'; else $(CYGPATH_W) '$(srcdir)/OdometerSensor.cpp'; fi`
 
 robotworld-RectangleShape.o: RectangleShape.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-RectangleShape.o -MD -MP -MF $(DEPDIR)/robotworld-RectangleShape.Tpo -c -o robotworld-RectangleShape.o `test -f 'RectangleShape.cpp' || echo '$(srcdir)/'`RectangleShape.cpp

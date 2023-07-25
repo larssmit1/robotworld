@@ -6,6 +6,7 @@
 #include "LaserDistanceSensor.hpp"
 #include "LidarSensor.hpp"
 #include "CompassSensor.hpp"
+#include "OdometerSensor.hpp"
 #include "Logger.hpp"
 #include "MainApplication.hpp"
 #include "MathUtils.hpp"
@@ -58,6 +59,9 @@ namespace Model
 
 		std::shared_ptr<CompassSensor> compassSensor = std::make_shared<CompassSensor>(*this);
 		attachSensor(compassSensor);
+
+		std::shared_ptr<OdometerSensor> odometerSensor = std::make_shared<OdometerSensor>(*this);
+		attachSensor(odometerSensor);
 
 		// We use the real position for starters, not an estimated position.
 		startPosition = position;
@@ -463,6 +467,8 @@ namespace Model
 				position.x = vertex.x;
 				position.y = vertex.y;
 
+				passedPoints.push_back(position);
+
 				// Do the measurements / handle all percepts
 				// TODO There are race conditions here:
 				//			1. size() is not atomic
@@ -487,6 +493,10 @@ namespace Model
 							currentLidarPointcloud = distancePercepts->pointCloud;
 						}
 						else if(typeid(tempAbstractPercept) == typeid(OrientationPercept))
+						{
+							//TODO: does nothing for now
+						}
+						else if(typeid(tempAbstractPercept) == typeid(MileagePercept))
 						{
 							//TODO: does nothing for now
 						}
