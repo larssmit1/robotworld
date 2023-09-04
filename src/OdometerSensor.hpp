@@ -15,8 +15,26 @@ namespace Model
 	class OdometerSensor : public AbstractSensor
 	{
 		public:
+			/**
+			 * @brief Construct a new Odometer Sensor object
+			 * 
+			 * @param aRobot 
+			 */
 			explicit OdometerSensor(Robot& aRobot);
+
+			/**
+			 * @brief Returns the points which the robot has passed
+			 * 
+			 * @return std::shared_ptr<AbstractStimulus> 
+			 */
 			virtual std::shared_ptr<AbstractStimulus> getStimulus() const override;
+
+			/**
+			 * @brief Returns the distance the robot has traveled
+			 * 
+			 * @param anAbstractStimulus 
+			 * @return std::shared_ptr<AbstractPercept> 
+			 */
 			virtual std::shared_ptr<AbstractPercept> getPerceptFor(std::shared_ptr<AbstractStimulus> anAbstractStimulus) const override;
 
 			/**
