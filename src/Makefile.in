@@ -112,6 +112,7 @@ am_robotworld_OBJECTS = robotworld-AbstractActuator.$(OBJEXT) \
 	robotworld-CommunicationService.$(OBJEXT) \
 	robotworld-FileTraceFunction.$(OBJEXT) \
 	robotworld-Goal.$(OBJEXT) robotworld-GoalShape.$(OBJEXT) \
+	robotworld-Kalman.$(OBJEXT) \
 	robotworld-LaserDistanceSensor.$(OBJEXT) \
 	robotworld-LidarSensor.$(OBJEXT) \
 	robotworld-CompassSensor.$(OBJEXT) \
@@ -401,6 +402,7 @@ robotworld_SOURCES = AbstractActuator.cpp	\
 						FileTraceFunction.cpp	\
 						Goal.cpp	\
 						GoalShape.cpp	\
+						Kalman.cpp \
 						LaserDistanceSensor.cpp	\
 						LidarSensor.cpp \
 						CompassSensor.cpp \
@@ -560,6 +562,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-FileTraceFunction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Goal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-GoalShape.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Kalman.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-LaserDistanceSensor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-LidarSensor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-LineShape.Po@am__quote@
@@ -743,6 +746,20 @@ robotworld-GoalShape.obj: GoalShape.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='GoalShape.cpp' object='robotworld-GoalShape.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-GoalShape.obj `if test -f 'GoalShape.cpp'; then $(CYGPATH_W) 'GoalShape.cpp'; else $(CYGPATH_W) '$(srcdir)/GoalShape.cpp'; fi`
+
+robotworld-Kalman.o: Kalman.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-Kalman.o -MD -MP -MF $(DEPDIR)/robotworld-Kalman.Tpo -c -o robotworld-Kalman.o `test -f 'Kalman.cpp' || echo '$(srcdir)/'`Kalman.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-Kalman.Tpo $(DEPDIR)/robotworld-Kalman.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Kalman.cpp' object='robotworld-Kalman.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-Kalman.o `test -f 'Kalman.cpp' || echo '$(srcdir)/'`Kalman.cpp
+
+robotworld-Kalman.obj: Kalman.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-Kalman.obj -MD -MP -MF $(DEPDIR)/robotworld-Kalman.Tpo -c -o robotworld-Kalman.obj `if test -f 'Kalman.cpp'; then $(CYGPATH_W) 'Kalman.cpp'; else $(CYGPATH_W) '$(srcdir)/Kalman.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-Kalman.Tpo $(DEPDIR)/robotworld-Kalman.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Kalman.cpp' object='robotworld-Kalman.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-Kalman.obj `if test -f 'Kalman.cpp'; then $(CYGPATH_W) 'Kalman.cpp'; else $(CYGPATH_W) '$(srcdir)/Kalman.cpp'; fi`
 
 robotworld-LaserDistanceSensor.o: LaserDistanceSensor.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-LaserDistanceSensor.o -MD -MP -MF $(DEPDIR)/robotworld-LaserDistanceSensor.Tpo -c -o robotworld-LaserDistanceSensor.o `test -f 'LaserDistanceSensor.cpp' || echo '$(srcdir)/'`LaserDistanceSensor.cpp

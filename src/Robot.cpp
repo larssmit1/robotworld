@@ -49,7 +49,8 @@ namespace Model
 								speed( 0.0),
 								acting(false),
 								driving(false),
-								communicating(false)
+								communicating(false),
+								kalmanfilter(aPosition.x, aPosition.y, 90)
 	{
 		std::shared_ptr<AbstractSensor> laserSensor = std::make_shared<LaserDistanceSensor>(*this);
 		attachSensor(laserSensor);

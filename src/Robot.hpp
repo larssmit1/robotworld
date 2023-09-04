@@ -13,6 +13,7 @@
 #include "Point.hpp"
 #include "Region.hpp"
 #include "Size.hpp"
+#include "Kalman.hpp"
 
 #include <iostream>
 #include <memory>
@@ -259,6 +260,8 @@ namespace Model
 			PointCloud currentLidarPointcloud;
 
 			std::vector<wxPoint> passedPoints;
+
+			Kalman kalmanfilter;
 
 		protected:
 			/**

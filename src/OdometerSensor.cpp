@@ -7,8 +7,6 @@
 #include "Shape2DUtils.hpp"
 #include "MathUtils.hpp"
 
-#include <random>
-
 #define PI 3.14159265359
 
 namespace Model
@@ -17,14 +15,28 @@ namespace Model
 
 	OdometerSensor::OdometerSensor(Robot& aRobot) 
 		: AbstractSensor(aRobot)
-	{}
+	{
+		std::random_device rd{};
+		std::mt19937 aGen{rd()};
+		gen = aGen;
+	}
 
 	std::shared_ptr<AbstractStimulus> OdometerSensor::getStimulus() const
 	{
 		Robot* robot = dynamic_cast<Robot*>(agent);
+
+		std::mt19937 aGen = gen;
+		std::normal_distribution<> noise{0, OdometerSensor::stddev};
+
 		if(robot)
 		{
 			std::vector<wxPoint> points = robot->passedPoints;
+
+			for(int i = 0; i < points.size(); i++)
+			{
+				points.at(i).x = points.at(i).x + noise(aGen);
+				points.at(i).y = points.at(i).y + noise(aGen);
+			}
 
 			return std::make_shared<MileageStimulus>(points);
 		}
@@ -55,9 +67,9 @@ namespace Model
 			}
 		}
 
-		Application::Logger::log(__PRETTY_FUNCTION__ +
-			std::string(": traveled ") + std::to_string(totalDistance) +
-			std::string(", steps ") + std::to_string(stepDistances.size()));
+		// Application::Logger::log(__PRETTY_FUNCTION__ +
+		// 	std::string(": traveled ") + std::to_string(totalDistance) +
+		// 	std::string(", steps ") + std::to_string(stepDistances.size()));
 
 		return std::make_shared<MileagePercept>(totalDistance, stepDistances);
 	}

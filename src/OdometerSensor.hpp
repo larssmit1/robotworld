@@ -5,6 +5,8 @@
 #include "AbstractSensor.hpp"
 #include "MileagePercept.hpp"
 
+#include <random>
+
 namespace Model
 {
 	class Robot;
@@ -50,6 +52,10 @@ namespace Model
 			 * Standard deviation of the odometer per 10 pixels
 			 */
 			static double stddev;
+			/**
+			 * random gen which is created initialy so the random numbers stay the same
+			 */
+			std::mt19937 gen;
 	};
 } // namespace Model
 

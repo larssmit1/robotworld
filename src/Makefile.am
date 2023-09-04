@@ -8,6 +8,7 @@ robotworld_SOURCES 	= 	AbstractActuator.cpp	\
 						FileTraceFunction.cpp	\
 						Goal.cpp	\
 						GoalShape.cpp	\
+						Kalman.cpp \
 						LaserDistanceSensor.cpp	\
 						LidarSensor.cpp \
 						CompassSensor.cpp \
