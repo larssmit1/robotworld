@@ -268,8 +268,9 @@ namespace Model
 			// Radar
 			double distanceTraveled; // The latest total distance the robot traveled
 			double lastDistanceTraveled; // The past total distance the robot traveled (used for kalmanfilter)
-			std::vector<wxPoint> passedPoints; // The points the robot passed to calculate the distance traveled
 			//@}
+
+			std::vector<wxPoint> passedPoints; // The points the robot passed while moving
 
 		protected:
 			/**
