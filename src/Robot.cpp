@@ -22,6 +22,7 @@
 #include <ctime>
 #include <sstream>
 #include <thread>
+#include <cmath>
 
 namespace Model
 {
@@ -42,11 +43,15 @@ namespace Model
 	 */
 	Robot::Robot(	const std::string& aName,
 					const wxPoint& aPosition) :
+								orientation(0),
+								distanceTraveled(0),
+								lastDistanceTraveled(0),
 								name( aName),
 								size( wxDefaultSize),
 								position( aPosition),
 								front( 0, 0),
 								speed( 0.0),
+								pathSpacing(wxSize(15, 5)),
 								acting(false),
 								driving(false),
 								communicating(false),
@@ -462,11 +467,34 @@ namespace Model
 			unsigned pathPoint = 0;
 			while (position.x > 0 && position.x < 1024 && position.y > 0 && position.y < 1024 && pathPoint < path.size()) // @suppress("Avoid magic numbers")
 			{
+				bool usingKalman = true;
+
 				// Do the update
 				const PathAlgorithm::Vertex& vertex = path[pathPoint+=static_cast<unsigned int>(speed)];
-				front = BoundedVector( vertex.asPoint(), position);
-				position.x = vertex.x;
-				position.y = vertex.y;
+				if(usingKalman){ // TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
+					Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());
+
+					wxPoint kalmanPos((int) round(kalmanfilter.getStateVector().at(0,0)), (int) round(kalmanfilter.getStateVector().at(1,0)));
+					double kalmanAngle = kalmanfilter.getStateVector().at(2,0);
+
+					double xDiff = vertex.x - kalmanPos.x;
+					double yDiff = vertex.y - kalmanPos.y;
+					double angleDiff = Utils::Shape2DUtils::getAngle(front) * 180 / Utils::PI - kalmanAngle;
+
+					front = BoundedVector(vertex.asPoint(), kalmanPos);
+					position.x += (int) std::round(xDiff);
+					position.y += (int) std::round(yDiff);
+
+					Matrix<double, 3, 1> updateMatrix{xDiff, yDiff, angleDiff};
+					kalmanfilter.controlUpdate(updateMatrix);
+					kalmanfilter.calculateKalmanGain();
+
+					Application::Logger::log(std::string(": update_matrix ") + updateMatrix.to_string());
+				} else {
+					front = BoundedVector(vertex.asPoint(), position);
+					position.x = vertex.x;
+					position.y = vertex.y;
+				}
 
 				passedPoints.push_back(position);
 
@@ -495,11 +523,13 @@ namespace Model
 						}
 						else if(typeid(tempAbstractPercept) == typeid(OrientationPercept))
 						{
-							//TODO: does nothing for now
+							OrientationPercept* orientationPercept = dynamic_cast<OrientationPercept*>(percept.value().get());
+							orientation = orientationPercept->orientation;
 						}
 						else if(typeid(tempAbstractPercept) == typeid(MileagePercept))
 						{
-							//TODO: does nothing for now
+							MileagePercept* mileagePercept = dynamic_cast<MileagePercept*>(percept.value().get());
+							distanceTraveled = mileagePercept->totalDistance;
 						}
 						else
 						{
@@ -512,6 +542,19 @@ namespace Model
 				}
 
 				// Update the belief
+				if(usingKalman){
+					double measuredAngle = orientation;
+					double measuredX = kalmanfilter.getStateVector().at(0,0) + (distanceTraveled - lastDistanceTraveled)
+										* std::cos(measuredAngle * (Utils::PI / 180));
+					double measuredY = kalmanfilter.getStateVector().at(1,0) + (distanceTraveled - lastDistanceTraveled)
+										* std::sin(measuredAngle * (Utils::PI / 180));
+
+					Matrix<double, 3, 1> measurementVector{measuredX, measuredY, measuredAngle};
+					kalmanfilter.measurementUpdate(measurementVector);
+					lastDistanceTraveled = distanceTraveled;
+
+					Application::Logger::log(std::string(": measurement_matrix ") + measurementVector.to_string());
+				}
 
 				// Stop on arrival or collision
 				if (arrived(goal) || collision())
@@ -561,7 +604,7 @@ namespace Model
 
 			front = BoundedVector( aGoal->getPosition(), position);
 			//handleNotificationsFor( astar);
-			path = astar.search( position, aGoal->getPosition(), size);
+			path = astar.search( position, aGoal->getPosition(), size + pathSpacing);
 			//stopHandlingNotificationsFor( astar);
 
 			Application::Logger::setDisable( false);

@@ -257,11 +257,19 @@ namespace Model
 			PointCloud currentRadarPointCloud; // The latest radar point cloud
 			//@}
 
-			PointCloud currentLidarPointcloud;
+			// lidar
+			PointCloud currentLidarPointcloud; // The latest ladar point cloud
+			//@}
 
-			std::vector<wxPoint> passedPoints;
+			// compass
+			double orientation; // The latest orientation of the robot
+			//@}
 
-			Kalman kalmanfilter;
+			// Radar
+			double distanceTraveled; // The latest total distance the robot traveled
+			double lastDistanceTraveled; // The past total distance the robot traveled (used for kalmanfilter)
+			std::vector<wxPoint> passedPoints; // The points the robot passed to calculate the distance traveled
+			//@}
 
 		protected:
 			/**
@@ -316,6 +324,10 @@ namespace Model
 			/**
 			 *
 			 */
+			wxSize pathSpacing;
+			/**
+			 * 
+			 */
 			bool acting;
 			/**
 			 *
@@ -337,6 +349,10 @@ namespace Model
 			 *
 			 */
 			Messaging::ServerPtr server;
+			/**
+			 * 
+			 */
+			Kalman kalmanfilter;
 	};
 } // namespace Model
 #endif // ROBOT_HPP_

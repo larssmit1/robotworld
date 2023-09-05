@@ -12,19 +12,19 @@ class Kalman {//kompas en odometer
         void calculateKalmanGain();
         void measurementUpdate(const Matrix<double, 3, 1>& measurementVector);
 
+        Matrix<double, 3, 1> getStateVector();
+
     private:
         Matrix<double, 3, 1> processNoiseVector;
         Matrix<double, 3, 3> processNoiseCovarianceVector;
         Matrix<double, 3, 3> sensorCovarianceMatrix;
 
-        Matrix<double, 3, 1> previousStateVector;
-        Matrix<double, 3, 3> previousProcessCovariance;
+        Matrix<double, 3, 1> stateVector;
+        Matrix<double, 3, 3> processCovariance;
 
         Matrix<double, 3, 1> predictedStateVector;
         Matrix<double, 3, 3> predictedProcessCovariance;
         double kalmanGain;
-        Matrix<double, 3, 1> adjustedStateVector;
-        Matrix<double, 3, 3> adjustedProcessCovariance;
 };
 
 #endif // KALMAN_HPP_

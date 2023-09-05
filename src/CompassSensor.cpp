@@ -9,8 +9,6 @@
 
 #include <random>
 
-#define PI 3.14159265359
-
 namespace Model
 {
 	/* static */ double CompassSensor::stddev = 2;
@@ -27,7 +25,7 @@ namespace Model
 			std::random_device rd{};
 			std::mt19937 gen{rd()};
 
-			double stddev_radians = (stddev * PI) / 180;
+			double stddev_radians = (stddev * Utils::PI) / 180;
 		    std::normal_distribution<> noise{0, stddev_radians};
 
             double radians = Utils::Shape2DUtils::getAngle(robot->getFront()) + noise(gen);
@@ -41,7 +39,7 @@ namespace Model
 	{
 		OrientationStimulus* distanceStimuli = dynamic_cast<OrientationStimulus*>(anAbstractStimulus.get());
 
-		double degrees = (distanceStimuli->radians * 180) / PI;
+		double degrees = (distanceStimuli->radians * 180) / Utils::PI;
 
 		// Application::Logger::log(__PRETTY_FUNCTION__ +
 		// 	std::string(": angle ") + std::to_string(degrees));

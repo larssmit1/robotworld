@@ -7,8 +7,6 @@
 #include "Shape2DUtils.hpp"
 #include "MathUtils.hpp"
 
-#define PI 3.14159265359
-
 namespace Model
 {
 	/* static */ double OdometerSensor::stddev = 1;
@@ -45,10 +43,6 @@ namespace Model
 
 	std::shared_ptr<AbstractPercept> OdometerSensor::getPerceptFor(std::shared_ptr<AbstractStimulus> anAbstractStimulus) const
 	{
-		std::random_device rd{};
-		std::mt19937 gen{rd()};
-		std::normal_distribution<> noise{0, OdometerSensor::stddev};
-
 		MileageStimulus* stimulus = dynamic_cast<MileageStimulus*>(anAbstractStimulus.get());
 		double totalDistance = 0;
 		std::vector<double> stepDistances;
