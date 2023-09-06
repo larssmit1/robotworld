@@ -5,7 +5,7 @@ namespace Application
 	/**
 	 *
 	 */
-	MainSettings::MainSettings() : drawOpenSet(true), speed(10), worldNumber(0)
+	MainSettings::MainSettings() : drawOpenSet(true), drawLidar(false), speed(10), worldNumber(0), robotDriveMode(DEFAULT)
 	{
 	}
 	/**
@@ -24,9 +24,41 @@ namespace Application
 	/**
 	 *
 	 */
+	bool MainSettings::getDrawLidar() const
+	{
+		return drawLidar;
+	}
+	/**
+	 *
+	 */
+	RobotDriveMode MainSettings::getRobotDriveMode() const
+	{
+		return robotDriveMode;
+	}
+	/**
+	 *
+	 */
 	void MainSettings::setDrawOpenSet( bool aDrawOpenSet)
 	{
 		drawOpenSet = aDrawOpenSet;
+	}
+	/**
+	 *
+	 */
+	void MainSettings::setDrawLidar( bool aDrawLidar)
+	{
+		drawLidar = aDrawLidar;
+	}
+	/**
+	 *
+	 */
+	void MainSettings::setRobotDriveMode( int aRobotDriveMode)
+	{
+		if(aRobotDriveMode >= 0 && aRobotDriveMode < 3){ // 0 = DEFAULT, 1 = KALMAN, 2 = PARTICLE
+			robotDriveMode = (RobotDriveMode) aRobotDriveMode;
+		} else {
+			robotDriveMode = DEFAULT;
+		}
 	}
 	/**
 	 *

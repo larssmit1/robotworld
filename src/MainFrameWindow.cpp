@@ -356,6 +356,13 @@ namespace Application
 					wxGBSpan( 1, 1),
 					wxSHRINK | wxALIGN_CENTRE);
 
+		sizer->Add( drawLidarCheckbox = Application::makeCheckbox( panel,
+																	 "Draw Lidar",
+																	 [this]( wxCommandEvent& event){this-> OnDrawLidar(event);}),
+					wxGBPosition( 1, 2),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTRE);
+
 		/////// Speed
 		sizer->Add(new wxStaticText(panel,
 									wxID_ANY,
@@ -412,6 +419,31 @@ namespace Application
 												"World number",
 												wxRA_SPECIFY_ROWS),
 					wxGBPosition( 3, 1),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTER);
+		sizer->AddGrowableRow( 3);
+		sizer->AddGrowableCol( 1);
+
+		std::array<std::string,3> modeChoicesArray
+		{
+			"1 Default mode",
+			"2 Kalman filter mode",
+			"3 Particle filter mode"
+		};
+
+		sizer->Add(	driveNumber = makeRadiobox(	panel,
+												modeChoicesArray,
+												[this](wxCommandEvent& event)
+												{
+													wxRadioBox* radiobox = dynamic_cast< wxRadioBox* >(event.GetEventObject());
+													if(radiobox)
+													{
+														OnMode(event);
+													}
+												},
+												"Robot drive mode",
+												wxRA_SPECIFY_ROWS),
+					wxGBPosition( 3, 2),
 					wxGBSpan( 1, 1),
 					wxSHRINK | wxALIGN_CENTER);
 		sizer->AddGrowableRow( 3);
@@ -591,6 +623,14 @@ namespace Application
 	/**
 	 *
 	 */
+	void MainFrameWindow::OnDrawLidar( wxCommandEvent& UNUSEDPARAM(anEvent))
+	{
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setDrawLidar(drawLidarCheckbox->IsChecked());
+	}
+	/**
+	 *
+	 */
 	void MainFrameWindow::OnSpeedSpinCtrlUpdate( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
 //		TRACE_DEVELOP(anEvent.GetString().ToStdString());
@@ -632,6 +672,16 @@ namespace Application
 
 		MainSettings& mainSettings = MainApplication::getSettings();
 		mainSettings.setWorldNumber(worldNumber->GetSelection());
+	}
+	/**
+	 *
+	 */
+	void MainFrameWindow::OnMode( wxCommandEvent& anEvent)
+	{
+		TRACE_DEVELOP(anEvent.GetString().ToStdString());
+
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setRobotDriveMode(driveNumber->GetSelection());
 	}
 	/**
 	 *

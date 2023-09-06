@@ -3,6 +3,12 @@
 
 #include "Config.hpp"
 
+enum RobotDriveMode {
+	DEFAULT,
+	KALMAN,
+	PARTICLE
+};
+
 namespace Application
 {
 
@@ -27,7 +33,23 @@ namespace Application
 			/**
 			 *
 			 */
+			bool getDrawLidar() const;
+			/**
+			 *
+			 */
+			RobotDriveMode getRobotDriveMode() const;
+			/**
+			 *
+			 */
 			void setDrawOpenSet( bool aDrawOpenSet);
+			/**
+			 * 
+			 */
+			void setDrawLidar( bool aDrawLidar);
+			/**
+			 * 
+			 */
+			void setRobotDriveMode( int aRobotDriveMode);
 			/**
 			 *
 			 */
@@ -47,8 +69,10 @@ namespace Application
 
 		private:
 			bool drawOpenSet;
+			bool drawLidar;
 			unsigned long speed;
 			unsigned long worldNumber;
+			RobotDriveMode robotDriveMode;
 	};
 
 } /* namespace Application */

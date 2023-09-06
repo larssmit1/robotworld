@@ -467,11 +467,16 @@ namespace Model
 			unsigned pathPoint = 0;
 			while (position.x > 0 && position.x < 1024 && position.y > 0 && position.y < 1024 && pathPoint < path.size()) // @suppress("Avoid magic numbers")
 			{
-				bool usingKalman = true;
-
 				// Do the update
+				RobotDriveMode robotDriveMode = Application::MainApplication::getSettings().getRobotDriveMode();
 				const PathAlgorithm::Vertex& vertex = path[pathPoint+=static_cast<unsigned int>(speed)];
-				if(usingKalman){ // TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
+
+				if(robotDriveMode == DEFAULT){
+					front = BoundedVector(vertex.asPoint(), position);
+					position.x = vertex.x;
+					position.y = vertex.y;
+				} else if(robotDriveMode == KALMAN){
+					// TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
 					Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());
 
 					wxPoint kalmanPos((int) round(kalmanfilter.getStateVector().at(0,0)), (int) round(kalmanfilter.getStateVector().at(1,0)));
@@ -490,10 +495,6 @@ namespace Model
 					kalmanfilter.calculateKalmanGain();
 
 					Application::Logger::log(std::string(": update_matrix ") + updateMatrix.to_string());
-				} else {
-					front = BoundedVector(vertex.asPoint(), position);
-					position.x = vertex.x;
-					position.y = vertex.y;
 				}
 
 				passedPoints.push_back(position);
@@ -542,7 +543,7 @@ namespace Model
 				}
 
 				// Update the belief
-				if(usingKalman){
+				if(robotDriveMode == KALMAN){
 					double measuredAngle = orientation;
 					double measuredX = kalmanfilter.getStateVector().at(0,0) + (distanceTraveled - lastDistanceTraveled)
 										* std::cos(measuredAngle * (Utils::PI / 180));

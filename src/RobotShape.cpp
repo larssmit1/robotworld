@@ -94,7 +94,10 @@ namespace View
 
 		drawLaser( dc);
 
-		drawLidar( dc);
+		if(Application::MainApplication::getSettings().getDrawLidar())
+		{
+			drawLidar( dc);
+		}
 	}
 	/**
 	 *
