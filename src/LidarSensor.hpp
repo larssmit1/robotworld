@@ -41,20 +41,6 @@ namespace Model
 			virtual std::shared_ptr<AbstractPercept> getPerceptFor(std::shared_ptr<AbstractStimulus> anAbstractStimulus) const override;
 
 			/**
-			 * @brief Set the Std Dev object
-			 * 
-			 * @param aStdDev 
-			 */
-			static void setStdDev(double aStdDev){LidarSensor::stddev = aStdDev;}
-
-			/**
-			 * @brief Get the Std Dev object
-			 * 
-			 * @return double 
-			 */
-			static double getStdDev(){return stddev;}
-
-			/**
 			 * @brief Returns a string which describes the object
 			 * 
 			 * @return std::string 
@@ -72,8 +58,8 @@ namespace Model
 			/**
 			 * Standard deviation of the lidar in pixels
 			 */
-			static double stddev;
-			static double beamAngle;
+			double stddev;
+			double beamAngle;
 	};
 } // namespace Model
 

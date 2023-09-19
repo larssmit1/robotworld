@@ -1,0 +1,4 @@
+stddev_compass: 2
+stddev_odometer: 1
+stddev_lidar: 10
+beamangle_lidar: 2

@@ -6,14 +6,15 @@
 #include "Wall.hpp"
 #include "Shape2DUtils.hpp"
 #include "MathUtils.hpp"
+#include "MainApplication.hpp"
 
 namespace Model
 {
-	/* static */ double OdometerSensor::stddev = 1;
-
 	OdometerSensor::OdometerSensor(Robot& aRobot) 
 		: AbstractSensor(aRobot)
 	{
+		stddev = Application::MainApplication::getSettings().getConfiguration().stddevOdometer;
+
 		std::random_device rd{};
 		std::mt19937 aGen{rd()};
 		gen = aGen;

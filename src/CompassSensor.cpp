@@ -6,16 +6,17 @@
 #include "Wall.hpp"
 #include "Shape2DUtils.hpp"
 #include "MathUtils.hpp"
+#include "MainApplication.hpp"
 
 #include <random>
 
 namespace Model
 {
-	/* static */ double CompassSensor::stddev = 2;
-
 	CompassSensor::CompassSensor(Robot& aRobot) 
 		: AbstractSensor(aRobot)
-	{}
+	{
+		stddev = Application::MainApplication::getSettings().getConfiguration().stddevCompass;
+	}
 
 	std::shared_ptr<AbstractStimulus> CompassSensor::getStimulus() const
 	{

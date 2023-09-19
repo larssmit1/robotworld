@@ -6,6 +6,7 @@
 #include "Wall.hpp"
 #include "Shape2DUtils.hpp"
 #include "MathUtils.hpp"
+#include "MainApplication.hpp"
 
 #include <random>
 
@@ -13,12 +14,12 @@
 
 namespace Model
 {
-	/* static */ double LidarSensor::stddev = 10.0;
-	/* static */ double LidarSensor::beamAngle = 2;
-
 	LidarSensor::LidarSensor(Robot& aRobot) 
 		: AbstractSensor(aRobot)
-	{}
+	{
+		stddev = Application::MainApplication::getSettings().getConfiguration().stddevLidar;
+		beamAngle = Application::MainApplication::getSettings().getConfiguration().beamAngleLidar;
+	}
 
 	std::shared_ptr<AbstractStimulus> LidarSensor::getStimulus() const
 	{

@@ -2,6 +2,7 @@
 #define MAINSETTINGS_HPP_
 
 #include "Config.hpp"
+#include "ConfigReader.hpp"
 
 enum RobotDriveMode {
 	DEFAULT,
@@ -41,15 +42,19 @@ namespace Application
 			/**
 			 *
 			 */
+			ConfigData getConfiguration() const;
+			/**
+			 *
+			 */
+			std::vector<WorldConfigData> getWorldConfigurations() const;
+			/**
+			 *
+			 */
 			void setDrawOpenSet( bool aDrawOpenSet);
 			/**
 			 * 
 			 */
 			void setDrawLidar( bool aDrawLidar);
-			/**
-			 * 
-			 */
-			void setRobotDriveMode( int aRobotDriveMode);
 			/**
 			 *
 			 */
@@ -66,6 +71,10 @@ namespace Application
 			 *
 			 */
 			void setWorldNumber( unsigned long aWorldNumber);
+			/**
+			 * 
+			 */
+			void setRobotDriveMode( int aRobotDriveMode);
 
 		private:
 			bool drawOpenSet;
@@ -73,6 +82,8 @@ namespace Application
 			unsigned long speed;
 			unsigned long worldNumber;
 			RobotDriveMode robotDriveMode;
+			ConfigData configuration;
+			std::vector<WorldConfigData> worldConfigurations;
 	};
 
 } /* namespace Application */

@@ -261,7 +261,7 @@ namespace Application
 					wxGBSpan( 1, 1),
 					wxSHRINK);
 
-		std::array<std::string,3> choicesArray
+		std::vector<std::string> choicesVector
 		{
 			"Window",
 			"StdOut",
@@ -269,7 +269,7 @@ namespace Application
 		};
 
 		sizer->Add(	logDestination = makeRadiobox(	panel,
-													choicesArray,
+													choicesVector,
 													[this](wxCommandEvent& event)
 													{
 														wxRadioBox* radiobox = dynamic_cast< wxRadioBox* >(event.GetEventObject());
@@ -378,45 +378,24 @@ namespace Application
 		speedSpinCtrl->SetValue(static_cast<int>(10));
 		speedSpinCtrl->Bind(wxEVT_COMMAND_SPINCTRL_UPDATED,[this](wxCommandEvent& event){this->OnSpeedSpinCtrlUpdate(event);});
 
-		std::array<std::string,3> choicesArray
-		{
-			"1 Default world",
-			"2 Student world 1",
-			"3 Student world 2"
-		};
+		std::vector<WorldConfigData> worldConfigurations = MainApplication::getSettings().getWorldConfigurations();
+		std::vector<std::string> choicesVector;
+
+		for(WorldConfigData wcd : worldConfigurations){
+			choicesVector.push_back(wcd.name);
+		}
 
 		sizer->Add(	worldNumber = makeRadiobox(	panel,
-												choicesArray,
+												choicesVector,
 												[this](wxCommandEvent& event)
 												{
 													wxRadioBox* radiobox = dynamic_cast< wxRadioBox* >(event.GetEventObject());
 													if(radiobox)
 													{
-														switch(radiobox->GetSelection())
-														{
-															case 0:
-															{
-																OnWorld1(event);
-																break;
-															}
-															case 1:
-															{
-																OnWorld2(event);
-																break;
-															}
-															case 2:
-															{
-																OnWorld3(event);
-																break;
-															}
-															default:
-															{
-																TRACE_DEVELOP("Unknown world selection");
-															}
-														}
+														OnWorld(event);
 													}
 												},
-												"World number",
+												"World",
 												wxRA_SPECIFY_ROWS),
 					wxGBPosition( 3, 1),
 					wxGBSpan( 1, 1),
@@ -424,15 +403,15 @@ namespace Application
 		sizer->AddGrowableRow( 3);
 		sizer->AddGrowableCol( 1);
 
-		std::array<std::string,3> modeChoicesArray
+		std::vector<std::string> modeChoicesVector
 		{
-			"1 Default mode",
-			"2 Kalman filter mode",
-			"3 Particle filter mode"
+			"Default mode",
+			"Kalman filter mode",
+			"Particle filter mode"
 		};
 
 		sizer->Add(	driveNumber = makeRadiobox(	panel,
-												modeChoicesArray,
+												modeChoicesVector,
 												[this](wxCommandEvent& event)
 												{
 													wxRadioBox* radiobox = dynamic_cast< wxRadioBox* >(event.GetEventObject());
@@ -646,27 +625,7 @@ namespace Application
 	/**
 	 *
 	 */
-	void MainFrameWindow::OnWorld1( wxCommandEvent& anEvent)
-	{
-		TRACE_DEVELOP(anEvent.GetString().ToStdString());
-
-		MainSettings& mainSettings = MainApplication::getSettings();
-		mainSettings.setWorldNumber(worldNumber->GetSelection());
-	}
-	/**
-	 *
-	 */
-	void MainFrameWindow::OnWorld2( wxCommandEvent& anEvent)
-	{
-		TRACE_DEVELOP(anEvent.GetString().ToStdString());
-
-		MainSettings& mainSettings = MainApplication::getSettings();
-		mainSettings.setWorldNumber(worldNumber->GetSelection());
-	}
-	/**
-	 *
-	 */
-	void MainFrameWindow::OnWorld3( wxCommandEvent& anEvent)
+	void MainFrameWindow::OnWorld( wxCommandEvent& anEvent)
 	{
 		TRACE_DEVELOP(anEvent.GetString().ToStdString());
 
@@ -710,39 +669,7 @@ namespace Application
 	 */
 	void MainFrameWindow::OnPopulate( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
-		switch(worldNumber->GetSelection())
-		{
-			case 0:
-			{
-				robotWorldCanvas->populate( 4);
-				// TODO Do something...
-//				std::shared_ptr<View::RobotShape> robotShape = std::dynamic_pointer_cast<View::RobotShape>(robotWorldCanvas->getSelectedShape());
-//				if(robotShape)
-//				{
-//					TRACE_DEVELOP("It should be checked...");
-//					drawOpenSetCheckbox->SetValue(robotShape->getDrawOpenSet());
-//				}else
-//				{
-//					TRACE_DEVELOP("No robotShape? It is not checked...");
-//				}
-				break;
-			}
-			case 1:
-			{
-				TRACE_DEVELOP("Please create your own student world 1");
-				break;
-			}
-			case 2:
-			{
-				TRACE_DEVELOP("Please create your own student world 2");
-				break;
-			}
-			default:
-			{
-				TRACE_DEVELOP("Huh?");
-				break;
-			}
-		}
+		robotWorldCanvas->populate(worldNumber->GetSelection());
 	}
 	/**
 	 *

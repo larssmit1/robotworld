@@ -38,20 +38,6 @@ namespace Model
 			virtual std::shared_ptr<AbstractPercept> getPerceptFor(std::shared_ptr<AbstractStimulus> anAbstractStimulus) const override;
 
 			/**
-			 * @brief Set the Std Dev object
-			 * 
-			 * @param aStdDev 
-			 */
-			static void setStdDev(double aStdDev){OdometerSensor::stddev = aStdDev;}
-
-			/**
-			 * @brief Get the Std Dev object
-			 * 
-			 * @return double 
-			 */
-			static double getStdDev(){return stddev;}
-
-			/**
 			 * @brief Returns a string which describes the object
 			 * 
 			 * @return std::string 
@@ -69,7 +55,7 @@ namespace Model
 			/**
 			 * Standard deviation of the odometer per 10 pixels
 			 */
-			static double stddev;
+			double stddev;
 			/**
 			 * random gen which is created initialy so the random numbers stay the same
 			 */

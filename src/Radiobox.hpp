@@ -42,9 +42,9 @@ namespace Application
 	 * @param aNumberOfRowsOrColumns
 	 * @return
 	 */
-	template< typename ActionFunction, std::size_t N >
+	template< typename ActionFunction>
 	wxRadioBox* makeRadiobox( 	wxWindow* aParent,
-								const std::array< std::string, N >& aListOfChoices,
+								const std::vector<std::string>& aListOfChoices,
 								const ActionFunction& anActionFunction,
 								const std::string& aLabel = "",
 								long aStyle = wxRA_SPECIFY_ROWS,

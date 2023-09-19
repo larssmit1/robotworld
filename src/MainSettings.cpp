@@ -7,6 +7,13 @@ namespace Application
 	 */
 	MainSettings::MainSettings() : drawOpenSet(true), drawLidar(false), speed(10), worldNumber(0), robotDriveMode(DEFAULT)
 	{
+		configuration = ConfigReader::readConfig();
+		worldConfigurations = ConfigReader::readWorldConfig();
+
+		ConfigReader::printConfig(configuration);
+		for(WorldConfigData wcd : worldConfigurations){
+			ConfigReader::printWorldConfig(wcd);
+		}
 	}
 	/**
 	 *
@@ -34,6 +41,20 @@ namespace Application
 	RobotDriveMode MainSettings::getRobotDriveMode() const
 	{
 		return robotDriveMode;
+	}
+	/**
+	 *
+	 */
+	ConfigData MainSettings::getConfiguration() const
+	{
+		return configuration;
+	}
+	/**
+	 *
+	 */
+	std::vector<WorldConfigData> MainSettings::getWorldConfigurations() const
+	{
+		return worldConfigurations;
 	}
 	/**
 	 *

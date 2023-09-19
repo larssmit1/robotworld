@@ -110,6 +110,7 @@ am_robotworld_OBJECTS = robotworld-AbstractActuator.$(OBJEXT) \
 	robotworld-AbstractSensor.$(OBJEXT) robotworld-AStar.$(OBJEXT) \
 	robotworld-BoundedVector.$(OBJEXT) \
 	robotworld-CommunicationService.$(OBJEXT) \
+	robotworld-ConfigReader.$(OBJEXT) \
 	robotworld-FileTraceFunction.$(OBJEXT) \
 	robotworld-Goal.$(OBJEXT) robotworld-GoalShape.$(OBJEXT) \
 	robotworld-Kalman.$(OBJEXT) \
@@ -399,6 +400,7 @@ robotworld_SOURCES = AbstractActuator.cpp	\
 						AStar.cpp	\
 						BoundedVector.cpp	\
 						CommunicationService.cpp	\
+						ConfigReader.cpp \
 						FileTraceFunction.cpp	\
 						Goal.cpp	\
 						GoalShape.cpp	\
@@ -559,6 +561,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-BoundedVector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-CommunicationService.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-CompassSensor.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-ConfigReader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-FileTraceFunction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Goal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-GoalShape.Po@am__quote@
@@ -704,6 +707,20 @@ robotworld-CommunicationService.obj: CommunicationService.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CommunicationService.cpp' object='robotworld-CommunicationService.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-CommunicationService.obj `if test -f 'CommunicationService.cpp'; then $(CYGPATH_W) 'CommunicationService.cpp'; else $(CYGPATH_W) '$(srcdir)/CommunicationService.cpp'; fi`
+
+robotworld-ConfigReader.o: ConfigReader.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-ConfigReader.o -MD -MP -MF $(DEPDIR)/robotworld-ConfigReader.Tpo -c -o robotworld-ConfigReader.o `test -f 'ConfigReader.cpp' || echo '$(srcdir)/'`ConfigReader.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-ConfigReader.Tpo $(DEPDIR)/robotworld-ConfigReader.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ConfigReader.cpp' object='robotworld-ConfigReader.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-ConfigReader.o `test -f 'ConfigReader.cpp' || echo '$(srcdir)/'`ConfigReader.cpp
+
+robotworld-ConfigReader.obj: ConfigReader.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-ConfigReader.obj -MD -MP -MF $(DEPDIR)/robotworld-ConfigReader.Tpo -c -o robotworld-ConfigReader.obj `if test -f 'ConfigReader.cpp'; then $(CYGPATH_W) 'ConfigReader.cpp'; else $(CYGPATH_W) '$(srcdir)/ConfigReader.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-ConfigReader.Tpo $(DEPDIR)/robotworld-ConfigReader.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='ConfigReader.cpp' object='robotworld-ConfigReader.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-ConfigReader.obj `if test -f 'ConfigReader.cpp'; then $(CYGPATH_W) 'ConfigReader.cpp'; else $(CYGPATH_W) '$(srcdir)/ConfigReader.cpp'; fi`
 
 robotworld-FileTraceFunction.o: FileTraceFunction.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-FileTraceFunction.o -MD -MP -MF $(DEPDIR)/robotworld-FileTraceFunction.Tpo -c -o robotworld-FileTraceFunction.o `test -f 'FileTraceFunction.cpp' || echo '$(srcdir)/'`FileTraceFunction.cpp

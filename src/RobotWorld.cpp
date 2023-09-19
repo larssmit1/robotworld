@@ -5,6 +5,7 @@
 #include "Robot.hpp"
 #include "Wall.hpp"
 #include "WayPoint.hpp"
+#include "MainApplication.hpp"
 
 #include <algorithm>
 
@@ -274,26 +275,16 @@ namespace Model
 	/**
 	 *
 	 */
-	void RobotWorld::populate( int UNUSEDPARAM(aNumberOfWalls))
+	void RobotWorld::populate( int worldIndex)
 	{
-		RobotWorld::getRobotWorld().newRobot( "Robot", wxPoint(163,111),false); // @suppress("Avoid magic numbers")
+		std::vector<WorldConfigData> worldConfigurations = Application::MainApplication::getSettings().getWorldConfigurations();
 
-//		static const wxPoint coordinates[] = {
-//			wxPoint( 100, 25), wxPoint( 700, 25),
-//			wxPoint( 75, 200), wxPoint( 250, 600),
-//			wxPoint( 800, 300), wxPoint( 800, 700),
-//			wxPoint( 50, 825), wxPoint( 600, 825)};
-//
-//		for (int i = 0; i < 2 * aNumberOfWalls; i += 2)
-//		{
-//			RobotWorld::getRobotWorld().newWall( coordinates[i], coordinates[i + 1],false);
-//		}
-//
-//		RobotWorld::getRobotWorld().newGoal( "Goal", wxPoint(850, 500),false); // @suppress("Avoid magic numbers")
-		
-		RobotWorld::getRobotWorld().newWall( wxPoint(7,234), wxPoint(419,234) ,false); // @suppress("Avoid magic numbers")
-		RobotWorld::getRobotWorld().newGoal( "Goal", wxPoint(320,285),false); // @suppress("Avoid magic numbers")
-		
+		RobotWorld::getRobotWorld().newRobot("Robot", worldConfigurations[worldIndex].robot, false);
+		RobotWorld::getRobotWorld().newGoal("Goal", worldConfigurations[worldIndex].goal, false);
+
+		for(std::array<wxPoint, 2> wall : worldConfigurations[worldIndex].walls){
+			RobotWorld::getRobotWorld().newWall(wall[0], wall[1], false);
+		}
 
 		notifyObservers();
 	}
