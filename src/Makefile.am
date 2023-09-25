@@ -27,6 +27,7 @@ robotworld_SOURCES 	= 	AbstractActuator.cpp	\
 						ObjectId.cpp	\
 						Observer.cpp	\
 						OdometerSensor.cpp \
+						ParticleFilter.cpp \
 						RectangleShape.cpp	\
 						Robot.cpp	\
 						RobotShape.cpp	\

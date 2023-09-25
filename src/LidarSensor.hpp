@@ -7,11 +7,6 @@
 
 namespace Model
 {
-	/**
-	 * Compile time configurable length of the laser beam
-	 */
-	const short int lidarBeamLength = 1024;
-
 	class Robot;
 	typedef std::shared_ptr<Robot> RobotPtr;
 
@@ -40,6 +35,8 @@ namespace Model
 			 */
 			virtual std::shared_ptr<AbstractPercept> getPerceptFor(std::shared_ptr<AbstractStimulus> anAbstractStimulus) const override;
 
+			static Stimuli getLidarValueAtLocation(const wxPoint& location, int noise);
+
 			/**
 			 * @brief Returns a string which describes the object
 			 * 
@@ -59,7 +56,6 @@ namespace Model
 			 * Standard deviation of the lidar in pixels
 			 */
 			double stddev;
-			double beamAngle;
 	};
 } // namespace Model
 

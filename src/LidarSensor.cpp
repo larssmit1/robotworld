@@ -10,15 +10,12 @@
 
 #include <random>
 
-#define PI 3.14159265359
-
 namespace Model
 {
 	LidarSensor::LidarSensor(Robot& aRobot) 
 		: AbstractSensor(aRobot)
 	{
 		stddev = Application::MainApplication::getSettings().getConfiguration().stddevLidar;
-		beamAngle = Application::MainApplication::getSettings().getConfiguration().beamAngleLidar;
 	}
 
 	std::shared_ptr<AbstractStimulus> LidarSensor::getStimulus() const
@@ -30,46 +27,8 @@ namespace Model
 			std::mt19937 gen{rd()};
 		    std::normal_distribution<> noise{0, LidarSensor::stddev};
 
-			Stimuli measurements;
+			Stimuli measurements = getLidarValueAtLocation(robot->getPosition(), noise(gen));
 
-			for(int i = 0; i <= 360 / beamAngle; i++)
-			{
-				double angle = (beamAngle * i * PI) / 180;
-				double distance = -1;
-
-				std::vector<WallPtr> walls = RobotWorld::getRobotWorld().getWalls();
-				for (std::shared_ptr<Wall> wall : walls)
-				{
-					wxPoint wallPoint1 = wall->getPoint1();
-					wxPoint wallPoint2 = wall->getPoint2();
-					wxPoint robotLocation = robot->getPosition();
-					wxPoint laserEndpoint{static_cast<int>(robotLocation.x + std::cos(angle) * lidarBeamLength + noise(gen)),
-										static_cast<int>(robotLocation.y + std::sin(angle) * lidarBeamLength + noise(gen))};
-
-					wxPoint interSection = Utils::Shape2DUtils::getIntersection(wallPoint1, wallPoint2, robotLocation, laserEndpoint);
-
-					if(interSection != wxDefaultPosition)
-					{
-						double new_distance = Utils::Shape2DUtils::distance(robotLocation, interSection);
-						if(distance == -1)
-						{
-							distance = new_distance;
-						}
-						else if(new_distance < distance)
-						{
-							distance = new_distance;
-						}
-					}
-				}
-
-				if(distance != -1)
-				{
-					measurements.push_back(DistanceStimulus(angle, distance));
-					// Application::Logger::log(__PRETTY_FUNCTION__ +
-					// 						std::string(": angle ") + std::to_string(beamAngle * i) +
-					// 						std::string(", distance ") + std::to_string(distance));
-				}
-			}
 			return std::make_shared<DistanceStimuli>(measurements);
 		}
 		return std::make_shared<DistanceStimuli>();
@@ -92,9 +51,51 @@ namespace Model
 
 				pointcloud.push_back(DistancePercept(endpoint));
 			}
-			return std::make_shared<DistancePercepts>(pointcloud);
+			return std::make_shared<DistancePercepts>(pointcloud, distanceStimuli->stimuli);
 		}
 		return std::make_shared<DistancePercepts>();
+	}
+
+	Stimuli LidarSensor::getLidarValueAtLocation(const wxPoint& location, int noise)
+	{
+		int beamLength = Application::MainApplication::getSettings().getConfiguration().beamLengthLidar;
+    	double beamAngle = Application::MainApplication::getSettings().getConfiguration().beamAngleLidar;
+
+		Stimuli measurements;
+
+		for(int i = 0; i <= 360 / beamAngle; i++)
+		{
+			double angle = (beamAngle * i * Utils::PI) / 180;
+			double distance = beamLength;
+
+			std::vector<WallPtr> walls = RobotWorld::getRobotWorld().getWalls();
+			for (std::shared_ptr<Wall> wall : walls)
+			{
+				wxPoint wallPoint1 = wall->getPoint1();
+				wxPoint wallPoint2 = wall->getPoint2();
+				wxPoint laserEndpoint{static_cast<int>(location.x + std::cos(angle) * beamLength + noise),
+									static_cast<int>(location.y + std::sin(angle) * beamLength + noise)};
+
+				wxPoint interSection = Utils::Shape2DUtils::getIntersection(wallPoint1, wallPoint2, location, laserEndpoint);
+
+				if(interSection != wxDefaultPosition)
+				{
+					double new_distance = Utils::Shape2DUtils::distance(location, interSection);
+					
+					if(new_distance < distance)
+					{
+						distance = new_distance;
+					}
+				}
+			}
+
+			measurements.push_back(DistanceStimulus(angle, distance));
+			// Application::Logger::log(__PRETTY_FUNCTION__ +
+			// 						std::string(": angle ") + std::to_string(beamAngle * i) +
+			// 						std::string(", distance ") + std::to_string(distance));
+
+		}
+		return measurements;
 	}
 
 	std::string LidarSensor::asString() const

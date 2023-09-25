@@ -55,7 +55,8 @@ namespace Model
 								acting(false),
 								driving(false),
 								communicating(false),
-								kalmanfilter(aPosition.x, aPosition.y, 90)
+								kalmanfilter(aPosition.x, aPosition.y, 90),
+								particlefilter(100, 600, 600)
 	{
 		std::shared_ptr<AbstractSensor> laserSensor = std::make_shared<LaserDistanceSensor>(*this);
 		attachSensor(laserSensor);
@@ -521,6 +522,7 @@ namespace Model
 						{
 							DistancePercepts* distancePercepts = dynamic_cast<DistancePercepts*>(percept.value().get());
 							currentLidarPointcloud = distancePercepts->pointCloud;
+							particlefilter.compareParticlesToLidar(distancePercepts->stimuli);
 						}
 						else if(typeid(tempAbstractPercept) == typeid(OrientationPercept))
 						{

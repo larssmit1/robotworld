@@ -25,10 +25,12 @@ namespace Model
 			/**
 			 *
 			 */
-			explicit DistancePercepts(const PointCloud& aPointCloud) : pointCloud(aPointCloud)
+			explicit DistancePercepts(const PointCloud& aPointCloud, const Stimuli& aStimuli) 
+			:pointCloud(aPointCloud), stimuli(aStimuli)
 			{
 			}
 			PointCloud pointCloud;
+			Stimuli stimuli;
 			/**
 			 * @name Debug functions
 			 */

@@ -27,6 +27,8 @@ ConfigData ConfigReader::readConfig(){
             iss >> cd.stddevLidar;
         } else if(initialString == "beamangle_lidar:"){
             iss >> cd.beamAngleLidar;
+        } else if(initialString == "beamlength_lidar:"){
+            iss >> cd.beamLengthLidar;
         }
     }
 

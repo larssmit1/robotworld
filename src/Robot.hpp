@@ -14,6 +14,7 @@
 #include "Region.hpp"
 #include "Size.hpp"
 #include "Kalman.hpp"
+#include "ParticleFilter.hpp"
 
 #include <iostream>
 #include <memory>
@@ -354,6 +355,10 @@ namespace Model
 			 * 
 			 */
 			Kalman kalmanfilter;
+			/**
+			 * 
+			 */
+			ParticleFilter particlefilter;
 	};
 } // namespace Model
 #endif // ROBOT_HPP_

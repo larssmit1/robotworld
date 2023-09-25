@@ -12,6 +12,7 @@ struct ConfigData{
     double stddevOdometer = 0;
     double stddevLidar = 0;
     double beamAngleLidar = 0;
+    int beamLengthLidar = 0;
 };
 
 struct WorldConfigData{
