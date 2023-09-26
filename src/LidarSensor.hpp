@@ -35,7 +35,14 @@ namespace Model
 			 */
 			virtual std::shared_ptr<AbstractPercept> getPerceptFor(std::shared_ptr<AbstractStimulus> anAbstractStimulus) const override;
 
-			static Stimuli getLidarValueAtLocation(const wxPoint& location, int noise);
+			/**
+			 * @brief Returns the measurement of from lidar at a specific location
+			 * 
+			 * @param location The location at which it's measured
+			 * @param noise noise added to the measurement to make it less accurate
+			 * @return Stimuli 
+			 */
+			static Stimuli getLidarValueAtLocation(const wxPoint& location, double noise);
 
 			/**
 			 * @brief Returns a string which describes the object

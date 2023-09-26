@@ -46,6 +46,8 @@ namespace Model
 								orientation(0),
 								distanceTraveled(0),
 								lastDistanceTraveled(0),
+								kalmanfilter(aPosition.x, aPosition.y, 90),
+								particlefilter(1000, 1024, 1024),
 								name( aName),
 								size( wxDefaultSize),
 								position( aPosition),
@@ -54,9 +56,7 @@ namespace Model
 								pathSpacing(wxSize(15, 5)),
 								acting(false),
 								driving(false),
-								communicating(false),
-								kalmanfilter(aPosition.x, aPosition.y, 90),
-								particlefilter(100, 600, 600)
+								communicating(false)
 	{
 		std::shared_ptr<AbstractSensor> laserSensor = std::make_shared<LaserDistanceSensor>(*this);
 		attachSensor(laserSensor);
@@ -476,6 +476,8 @@ namespace Model
 					front = BoundedVector(vertex.asPoint(), position);
 					position.x = vertex.x;
 					position.y = vertex.y;
+
+					particlefilter.actionUpdate(vertex.x - position.x, vertex.y - position.y);
 				} else if(robotDriveMode == KALMAN){
 					// TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
 					Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());
@@ -522,7 +524,7 @@ namespace Model
 						{
 							DistancePercepts* distancePercepts = dynamic_cast<DistancePercepts*>(percept.value().get());
 							currentLidarPointcloud = distancePercepts->pointCloud;
-							particlefilter.compareParticlesToLidar(distancePercepts->stimuli);
+							currentLidarStimuli = distancePercepts->stimuli;
 						}
 						else if(typeid(tempAbstractPercept) == typeid(OrientationPercept))
 						{
@@ -558,6 +560,8 @@ namespace Model
 
 					Application::Logger::log(std::string(": measurement_matrix ") + measurementVector.to_string());
 				}
+
+				particlefilter.measurementUpdate(currentLidarStimuli);
 
 				// Stop on arrival or collision
 				if (arrived(goal) || collision())

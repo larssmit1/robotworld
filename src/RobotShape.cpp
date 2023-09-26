@@ -98,6 +98,8 @@ namespace View
 		{
 			drawLidar( dc);
 		}
+
+		drawParticles( dc);
 	}
 	/**
 	 *
@@ -271,10 +273,21 @@ namespace View
 		Model::PointCloud pointcloud = getRobot()->currentLidarPointcloud;
 		wxPoint robotposition = getRobot()->getPosition();
 
-		for(const Model::DistancePercept percept : pointcloud)
+		for(const Model::DistancePercept& percept : pointcloud)
 		{
 			dc.SetPen( wxPen(  "BLUE", 1, wxPENSTYLE_SOLID));
 			dc.DrawLine(centre.x, centre.y, percept.point.x, percept.point.y);
+		}
+	}
+
+	void RobotShape::drawParticles(wxDC& dc)
+	{
+		std::vector<Particle> particles = getRobot()->particlefilter.getParticles();
+
+		for(const Particle& particle : particles)
+		{
+			dc.SetPen( wxPen(  "GREEN", 1, wxPENSTYLE_SOLID));
+			dc.DrawCircle(particle.location.x, particle.location.y, 1);
 		}
 	}
 } // namespace View

@@ -56,7 +56,7 @@ namespace Model
 		return std::make_shared<DistancePercepts>();
 	}
 
-	Stimuli LidarSensor::getLidarValueAtLocation(const wxPoint& location, int noise)
+	Stimuli LidarSensor::getLidarValueAtLocation(const wxPoint& location, double noise)
 	{
 		int beamLength = Application::MainApplication::getSettings().getConfiguration().beamLengthLidar;
     	double beamAngle = Application::MainApplication::getSettings().getConfiguration().beamAngleLidar;

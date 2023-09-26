@@ -262,6 +262,10 @@ namespace Model
 			PointCloud currentLidarPointcloud; // The latest ladar point cloud
 			//@}
 
+			// lidar stimuli
+			Stimuli currentLidarStimuli; // The latest ladar distances (stimuli)
+			//@}
+
 			// compass
 			double orientation; // The latest orientation of the robot
 			//@}
@@ -272,6 +276,10 @@ namespace Model
 			//@}
 
 			std::vector<wxPoint> passedPoints; // The points the robot passed while moving
+
+			Kalman kalmanfilter; // The object in which the kalman calculations are done
+
+			ParticleFilter particlefilter; // The object in which the particle filter calculations are done
 
 		protected:
 			/**
@@ -351,14 +359,6 @@ namespace Model
 			 *
 			 */
 			Messaging::ServerPtr server;
-			/**
-			 * 
-			 */
-			Kalman kalmanfilter;
-			/**
-			 * 
-			 */
-			ParticleFilter particlefilter;
 	};
 } // namespace Model
 #endif // ROBOT_HPP_

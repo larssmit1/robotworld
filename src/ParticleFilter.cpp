@@ -18,6 +18,22 @@ ParticleFilter::ParticleFilter(unsigned int aParticleCount, unsigned int aWorldW
 
 ParticleFilter::~ParticleFilter(){}
 
+void ParticleFilter::measurementUpdate(const Model::Stimuli& lidarValues){
+    compareParticlesToLidar(lidarValues);
+    calculateParticleChances();
+    removeParticlesOnChance();
+    // std::cout << "particle count: " << particles.size() << std::endl;
+}
+
+void ParticleFilter::actionUpdate(int xDiff, int yDiff){
+    moveParticles(xDiff, yDiff);
+    addRandomParticles(particleCount - particles.size());
+}
+
+std::vector<Particle> ParticleFilter::getParticles() const{
+    return particles;
+}
+
 void ParticleFilter::addRandomParticles(unsigned int aParticleCount){
     std::random_device rd{};
     std::mt19937 gen{rd()};
@@ -27,24 +43,59 @@ void ParticleFilter::addRandomParticles(unsigned int aParticleCount){
         int randomNmbr = dist(gen);
         int x = randomNmbr % worldWidth;
         int y = randomNmbr / worldWidth;
-        particles.push_back(wxPoint(x, y));
+        particles.push_back(Particle{wxPoint(x, y), 0, 0});
     }
 }
 
 void ParticleFilter::compareParticlesToLidar(const Model::Stimuli& lidarValues){
-    for(wxPoint particle : particles){
-        Model::Stimuli particleLidarValues = Model::LidarSensor::getLidarValueAtLocation(particle, 0);
-        double comparisonValue = 0;
+    for(Particle& particle : particles){
+        Model::Stimuli particleLidarValues = Model::LidarSensor::getLidarValueAtLocation(particle.location, 0);
+        particle.comparisonValue = 0;
 
-        for(unsigned int i = 0; i < particleLidarValues.size(); i++){
+        for(unsigned int i = 0; i < lidarValues.size(); i++){
             if(particleLidarValues[i].angle == lidarValues[i].angle){
-                comparisonValue += sqrt(pow(lidarValues[i].distance - particleLidarValues[i].distance, 2));
+                particle.comparisonValue += sqrt(pow(lidarValues[i].distance - particleLidarValues[i].distance, 2));
             } else {
                 std::cout << "lidar values are for different angles, can't compare these." << std::endl;
-                return;
+                particle.comparisonValue = -1;
+                break;
             }
         }
+    }
+}
 
-        std::cout << "comparison value: " << comparisonValue << std::endl;
+void ParticleFilter::removeParticlesOnChance(){
+    std::random_device rd{};
+    std::mt19937 gen{rd()};
+    std::uniform_int_distribution<int> dist(0 ,100);
+
+    for(int i = particles.size() - 1; i >= 0 ; i--){ //loop through it backwards to prevent indexes from changing for future values
+        int randomNmbr = dist(gen);
+
+        if(particles[i].particleChance < randomNmbr){
+            particles.erase(particles.begin() + i);
+        }
+    }
+}
+
+void ParticleFilter::calculateParticleChances(){
+    double magicNumber = 40000;
+
+    for(Particle& particle : particles){
+        if(particle.comparisonValue < 0){
+            particle.particleChance = 0;
+        } else {
+            if(particle.comparisonValue > magicNumber){
+                particle.comparisonValue = magicNumber;
+            }
+            particle.particleChance = 100.0 - (particle.comparisonValue / magicNumber * 100.0);
+        }
+    }
+}
+
+void ParticleFilter::moveParticles(int xDiff, int yDiff){
+    for(Particle& particle : particles){
+        particle.location.x += xDiff;
+        particle.location.y += yDiff;
     }
 }

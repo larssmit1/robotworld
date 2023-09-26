@@ -4,17 +4,29 @@
 #include "Widgets.hpp"
 #include "LidarSensor.hpp"
 
+struct Particle{
+    wxPoint location;
+    double comparisonValue;
+    double particleChance;
+};
+
 class ParticleFilter{
     public:
         ParticleFilter(unsigned int aParticleCount, unsigned int aWorldWidth, unsigned int aWorldHeight);
         ~ParticleFilter();
-        void compareParticlesToLidar(const Model::Stimuli& lidarValues);
+
+        void measurementUpdate(const Model::Stimuli& lidarValues);
+        void actionUpdate(int xDiff, int yDiff);
+        std::vector<Particle> getParticles() const;
     private:
         unsigned int particleCount, worldWidth, worldHeight;
-        std::vector<wxPoint> particles;
-        std::vector<double> comparisonValues;
+        std::vector<Particle> particles;
 
         void addRandomParticles(unsigned int aParticleCount);
+        void compareParticlesToLidar(const Model::Stimuli& lidarValues);
+        void removeParticlesOnChance();
+        void calculateParticleChances();
+        void moveParticles(int xDiff, int yDiff);
 };
 
 #endif /* PARTICLEFILTER_HPP_ */
