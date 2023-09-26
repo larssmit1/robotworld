@@ -473,11 +473,11 @@ namespace Model
 				const PathAlgorithm::Vertex& vertex = path[pathPoint+=static_cast<unsigned int>(speed)];
 
 				if(robotDriveMode == DEFAULT){
+					particlefilter.actionUpdate(vertex.x - position.x, vertex.y - position.y);
+					
 					front = BoundedVector(vertex.asPoint(), position);
 					position.x = vertex.x;
 					position.y = vertex.y;
-
-					particlefilter.actionUpdate(vertex.x - position.x, vertex.y - position.y);
 				} else if(robotDriveMode == KALMAN){
 					// TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
 					Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());

@@ -80,6 +80,7 @@ void ParticleFilter::removeParticlesOnChance(){
 
 void ParticleFilter::calculateParticleChances(){
     double magicNumber = 40000;
+    double minimumChance = 10;
 
     for(Particle& particle : particles){
         if(particle.comparisonValue < 0){
@@ -88,7 +89,7 @@ void ParticleFilter::calculateParticleChances(){
             if(particle.comparisonValue > magicNumber){
                 particle.comparisonValue = magicNumber;
             }
-            particle.particleChance = 100.0 - (particle.comparisonValue / magicNumber * 100.0);
+            particle.particleChance = (100.0 + minimumChance) - (particle.comparisonValue / magicNumber * 100.0);
         }
     }
 }
