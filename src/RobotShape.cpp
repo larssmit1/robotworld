@@ -271,7 +271,6 @@ namespace View
 	void RobotShape::drawLidar(wxDC& dc)
 	{
 		Model::PointCloud pointcloud = getRobot()->currentLidarPointcloud;
-		wxPoint robotposition = getRobot()->getPosition();
 
 		for(const Model::DistancePercept& percept : pointcloud)
 		{

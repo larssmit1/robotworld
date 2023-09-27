@@ -6,8 +6,7 @@
 
 enum RobotDriveMode {
 	DEFAULT,
-	KALMAN,
-	PARTICLE
+	KALMAN
 };
 
 namespace Application

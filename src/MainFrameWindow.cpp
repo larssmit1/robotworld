@@ -407,7 +407,6 @@ namespace Application
 		{
 			"Default mode",
 			"Kalman filter mode",
-			"Particle filter mode"
 		};
 
 		sizer->Add(	driveNumber = makeRadiobox(	panel,

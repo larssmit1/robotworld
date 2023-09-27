@@ -472,35 +472,44 @@ namespace Model
 				RobotDriveMode robotDriveMode = Application::MainApplication::getSettings().getRobotDriveMode();
 				const PathAlgorithm::Vertex& vertex = path[pathPoint+=static_cast<unsigned int>(speed)];
 
-				if(robotDriveMode == DEFAULT){
-					particlefilter.actionUpdate(vertex.x - position.x, vertex.y - position.y);
-					
-					front = BoundedVector(vertex.asPoint(), position);
-					position.x = vertex.x;
-					position.y = vertex.y;
-				} else if(robotDriveMode == KALMAN){
+				double xDiff, yDiff, angleDiff;
+
+				if(robotDriveMode == KALMAN){
 					// TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
-					Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());
+					// Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());
 
 					wxPoint kalmanPos((int) round(kalmanfilter.getStateVector().at(0,0)), (int) round(kalmanfilter.getStateVector().at(1,0)));
 					double kalmanAngle = kalmanfilter.getStateVector().at(2,0);
 
-					double xDiff = vertex.x - kalmanPos.x;
-					double yDiff = vertex.y - kalmanPos.y;
-					double angleDiff = Utils::Shape2DUtils::getAngle(front) * 180 / Utils::PI - kalmanAngle;
+					xDiff = vertex.x - kalmanPos.x;
+					yDiff = vertex.y - kalmanPos.y;
+					angleDiff = Utils::Shape2DUtils::getAngle(front) * 180 / Utils::PI - kalmanAngle;
 
 					front = BoundedVector(vertex.asPoint(), kalmanPos);
 					position.x += (int) std::round(xDiff);
 					position.y += (int) std::round(yDiff);
-
-					Matrix<double, 3, 1> updateMatrix{xDiff, yDiff, angleDiff};
-					kalmanfilter.controlUpdate(updateMatrix);
-					kalmanfilter.calculateKalmanGain();
-
-					Application::Logger::log(std::string(": update_matrix ") + updateMatrix.to_string());
+				} else { // DEFAULT
+					xDiff = vertex.x - position.x;
+					yDiff = vertex.y - position.y;
+					angleDiff = (Utils::Shape2DUtils::getAngle(front) -
+						Utils::Shape2DUtils::getAngle(BoundedVector(vertex.asPoint(), position))) *
+						180 / Utils::PI;
+					
+					front = BoundedVector(vertex.asPoint(), position);
+					position.x = vertex.x;
+					position.y = vertex.y;
 				}
 
 				passedPoints.push_back(position);
+
+				// particlefilter update
+				particlefilter.actionUpdate(xDiff, yDiff);
+
+				// kalmanfilter update
+				Matrix<double, 3, 1> updateMatrix{xDiff, yDiff, angleDiff};
+				kalmanfilter.controlUpdate(updateMatrix);
+				kalmanfilter.calculateKalmanGain();
+				// Application::Logger::log(std::string(": update_matrix ") + updateMatrix.to_string());
 
 				// Do the measurements / handle all percepts
 				// TODO There are race conditions here:
@@ -547,20 +556,19 @@ namespace Model
 				}
 
 				// Update the belief
-				if(robotDriveMode == KALMAN){
-					double measuredAngle = orientation;
-					double measuredX = kalmanfilter.getStateVector().at(0,0) + (distanceTraveled - lastDistanceTraveled)
-										* std::cos(measuredAngle * (Utils::PI / 180));
-					double measuredY = kalmanfilter.getStateVector().at(1,0) + (distanceTraveled - lastDistanceTraveled)
-										* std::sin(measuredAngle * (Utils::PI / 180));
+				// kalmanfilter measurement update
+				double measuredAngle = orientation;
+				double measuredX = kalmanfilter.getStateVector().at(0,0) + (distanceTraveled - lastDistanceTraveled)
+									* std::cos(measuredAngle * (Utils::PI / 180));
+				double measuredY = kalmanfilter.getStateVector().at(1,0) + (distanceTraveled - lastDistanceTraveled)
+									* std::sin(measuredAngle * (Utils::PI / 180));
 
-					Matrix<double, 3, 1> measurementVector{measuredX, measuredY, measuredAngle};
-					kalmanfilter.measurementUpdate(measurementVector);
-					lastDistanceTraveled = distanceTraveled;
+				Matrix<double, 3, 1> measurementVector{measuredX, measuredY, measuredAngle};
+				kalmanfilter.measurementUpdate(measurementVector);
+				lastDistanceTraveled = distanceTraveled;
+				// Application::Logger::log(std::string(": measurement_matrix ") + measurementVector.to_string());
 
-					Application::Logger::log(std::string(": measurement_matrix ") + measurementVector.to_string());
-				}
-
+				// particlefilter measurement update
 				particlefilter.measurementUpdate(currentLidarStimuli);
 
 				// Stop on arrival or collision
