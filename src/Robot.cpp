@@ -478,7 +478,7 @@ namespace Model
 					// TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
 					// Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());
 
-					wxPoint kalmanPos((int) round(kalmanfilter.getStateVector().at(0,0)), (int) round(kalmanfilter.getStateVector().at(1,0)));
+					wxPoint kalmanPos(static_cast<int>(round(kalmanfilter.getStateVector().at(0,0))), static_cast<int>(round(kalmanfilter.getStateVector().at(1,0))));
 					double kalmanAngle = kalmanfilter.getStateVector().at(2,0);
 
 					xDiff = vertex.x - kalmanPos.x;
@@ -486,8 +486,8 @@ namespace Model
 					angleDiff = Utils::Shape2DUtils::getAngle(front) * 180 / Utils::PI - kalmanAngle;
 
 					front = BoundedVector(vertex.asPoint(), kalmanPos);
-					position.x += (int) std::round(xDiff);
-					position.y += (int) std::round(yDiff);
+					position.x += static_cast<int>(std::round(xDiff));
+					position.y += static_cast<int>(std::round(yDiff));
 				} else { // DEFAULT
 					xDiff = vertex.x - position.x;
 					yDiff = vertex.y - position.y;
@@ -503,7 +503,7 @@ namespace Model
 				passedPoints.push_back(position);
 
 				// particlefilter update
-				particlefilter.actionUpdate(xDiff, yDiff);
+				particlefilter.actionUpdate(static_cast<int>(xDiff), static_cast<int>(yDiff));
 
 				// kalmanfilter update
 				Matrix<double, 3, 1> updateMatrix{xDiff, yDiff, angleDiff};

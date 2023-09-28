@@ -357,9 +357,30 @@ namespace Application
 					wxSHRINK | wxALIGN_CENTRE);
 
 		sizer->Add( drawLidarCheckbox = Application::makeCheckbox( panel,
-																	 "Draw Lidar",
+																	 "Draw lidar",
 																	 [this]( wxCommandEvent& event){this-> OnDrawLidar(event);}),
 					wxGBPosition( 1, 2),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTRE);
+		
+		sizer->Add( drawParticlesCheckbox = Application::makeCheckbox( panel,
+																	 "Draw particles",
+																	 [this]( wxCommandEvent& event){this-> OnDrawParticles(event);}),
+					wxGBPosition( 1, 3),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTRE);
+		
+		sizer->Add( drawKalmanRouteCheckbox = Application::makeCheckbox( panel,
+																	 "Draw Kalman route",
+																	 [this]( wxCommandEvent& event){this-> OnDrawKalmanRoute(event);}),
+					wxGBPosition( 2, 1),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTRE);
+
+		sizer->Add( drawParticleFilterRouteCheckbox = Application::makeCheckbox( panel,
+																	 "Draw particle filter route",
+																	 [this]( wxCommandEvent& event){this-> OnDrawParticleFilterRoute(event);}),
+					wxGBPosition( 2, 2),
 					wxGBSpan( 1, 1),
 					wxSHRINK | wxALIGN_CENTRE);
 
@@ -367,12 +388,12 @@ namespace Application
 		sizer->Add(new wxStaticText(panel,
 									wxID_ANY,
 									"Speed"),
-				   wxGBPosition( 2, 1),
+				   wxGBPosition( 3, 1),
 				   wxGBSpan( 1, 1),
 				   wxSHRINK | wxALIGN_CENTER);
 		sizer->Add(speedSpinCtrl = new wxSpinCtrl(panel,
 												  wxID_ANY),
-				   wxGBPosition( 2, 2),
+				   wxGBPosition( 3, 2),
 				   wxGBSpan( 1, 1),
 				   wxSHRINK | wxALIGN_CENTER);
 		speedSpinCtrl->SetValue(static_cast<int>(10));
@@ -397,7 +418,7 @@ namespace Application
 												},
 												"World",
 												wxRA_SPECIFY_ROWS),
-					wxGBPosition( 3, 1),
+					wxGBPosition( 4, 1),
 					wxGBSpan( 1, 1),
 					wxSHRINK | wxALIGN_CENTER);
 		sizer->AddGrowableRow( 3);
@@ -421,14 +442,14 @@ namespace Application
 												},
 												"Robot drive mode",
 												wxRA_SPECIFY_ROWS),
-					wxGBPosition( 3, 2),
+					wxGBPosition( 4, 2),
 					wxGBSpan( 1, 1),
 					wxSHRINK | wxALIGN_CENTER);
 		sizer->AddGrowableRow( 3);
 		sizer->AddGrowableCol( 1);
 
 		sizer->Add( 5, 5,
-					wxGBPosition( 4, 3),
+					wxGBPosition( 5, 3),
 					wxGBSpan( 1, 1),
 					wxGROW);
 		sizer->AddGrowableCol( 3);
@@ -605,6 +626,30 @@ namespace Application
 	{
 		MainSettings& mainSettings = MainApplication::getSettings();
 		mainSettings.setDrawLidar(drawLidarCheckbox->IsChecked());
+	}
+	/**
+	 *
+	 */
+	void MainFrameWindow::OnDrawParticles( wxCommandEvent& UNUSEDPARAM(anEvent))
+	{
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setDrawParticles(drawParticlesCheckbox->IsChecked());
+	}
+	/**
+	 *
+	 */
+	void MainFrameWindow::OnDrawKalmanRoute( wxCommandEvent& UNUSEDPARAM(anEvent))
+	{
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setDrawKalmanRoute(drawKalmanRouteCheckbox->IsChecked());
+	}
+	/**
+	 *
+	 */
+	void MainFrameWindow::OnDrawParticleFilterRoute( wxCommandEvent& UNUSEDPARAM(anEvent))
+	{
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setDrawParticleFilterRoute(drawParticleFilterRouteCheckbox->IsChecked());
 	}
 	/**
 	 *

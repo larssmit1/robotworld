@@ -31,10 +31,10 @@ namespace Model
 		{
 			std::vector<wxPoint> points = robot->passedPoints;
 
-			for(int i = 0; i < points.size(); i++)
+			for(unsigned int i = 0; i < points.size(); i++)
 			{
-				points.at(i).x = points.at(i).x + noise(aGen);
-				points.at(i).y = points.at(i).y + noise(aGen);
+				points.at(i).x = points.at(i).x + static_cast<int>(noise(aGen));
+				points.at(i).y = points.at(i).y + static_cast<int>(noise(aGen));
 			}
 
 			return std::make_shared<MileageStimulus>(points);

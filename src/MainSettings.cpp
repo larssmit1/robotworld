@@ -38,6 +38,27 @@ namespace Application
 	/**
 	 *
 	 */
+	bool MainSettings::getDrawParticles() const
+	{
+		return drawParticles;
+	}
+	/**
+	 *
+	 */
+	bool MainSettings::getDrawKalmanRoute() const
+	{
+		return drawKalmanRoute;
+	}
+	/**
+	 *
+	 */
+	bool MainSettings::getDrawParticleFilterRoute() const
+	{
+		return drawParticleFilterRoute;
+	}
+	/**
+	 *
+	 */
 	RobotDriveMode MainSettings::getRobotDriveMode() const
 	{
 		return robotDriveMode;
@@ -62,6 +83,27 @@ namespace Application
 	void MainSettings::setDrawOpenSet( bool aDrawOpenSet)
 	{
 		drawOpenSet = aDrawOpenSet;
+	}
+	/**
+	 *
+	 */
+	void MainSettings::setDrawParticles( bool aDrawParticles)
+	{
+		drawParticles = aDrawParticles;
+	}
+	/**
+	 *
+	 */
+	void MainSettings::setDrawKalmanRoute( bool aDrawKalmanRoute)
+	{
+		drawKalmanRoute = aDrawKalmanRoute;
+	}
+	/**
+	 *
+	 */
+	void MainSettings::setDrawParticleFilterRoute( bool aDrawParticleFilterRoute)
+	{
+		drawParticleFilterRoute = aDrawParticleFilterRoute;
 	}
 	/**
 	 *

@@ -37,6 +37,18 @@ namespace Application
 			/**
 			 *
 			 */
+			bool getDrawParticles() const;
+			/**
+			 *
+			 */
+			bool getDrawKalmanRoute() const;
+			/**
+			 *
+			 */
+			bool getDrawParticleFilterRoute() const;
+			/**
+			 *
+			 */
 			RobotDriveMode getRobotDriveMode() const;
 			/**
 			 *
@@ -54,6 +66,18 @@ namespace Application
 			 * 
 			 */
 			void setDrawLidar( bool aDrawLidar);
+			/**
+			 *
+			 */
+			void setDrawParticles( bool aDrawParticles);
+			/**
+			 * 
+			 */
+			void setDrawKalmanRoute( bool aDrawKalmanRoute);
+			/**
+			 * 
+			 */
+			void setDrawParticleFilterRoute( bool aDrawParticleFilterRoute);
 			/**
 			 *
 			 */
@@ -78,6 +102,9 @@ namespace Application
 		private:
 			bool drawOpenSet;
 			bool drawLidar;
+			bool drawParticles;
+			bool drawKalmanRoute;
+			bool drawParticleFilterRoute;
 			unsigned long speed;
 			unsigned long worldNumber;
 			RobotDriveMode robotDriveMode;

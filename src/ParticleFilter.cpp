@@ -22,12 +22,11 @@ void ParticleFilter::measurementUpdate(const Model::Stimuli& lidarValues){
     compareParticlesToLidar(lidarValues);
     calculateParticleChances();
     removeParticlesOnChance();
-    // std::cout << "particle count: " << particles.size() << std::endl;
 }
 
 void ParticleFilter::actionUpdate(int xDiff, int yDiff){
     moveParticles(xDiff, yDiff);
-    addRandomParticles(particleCount - particles.size());
+    addRandomParticles(static_cast<unsigned int>(particleCount - particles.size()));
 }
 
 std::vector<Particle> ParticleFilter::getParticles() const{
@@ -69,7 +68,7 @@ void ParticleFilter::removeParticlesOnChance(){
     std::mt19937 gen{rd()};
     std::uniform_int_distribution<int> dist(0 ,100);
 
-    for(int i = particles.size() - 1; i >= 0 ; i--){ //loop through it backwards to prevent indexes from changing for future values
+    for(int i = static_cast<int>(particles.size()) - 1; i >= 0 ; i--){ //loop through it backwards to prevent indexes from changing for future values
         int randomNmbr = dist(gen);
 
         if(particles[i].particleChance < randomNmbr){
@@ -79,8 +78,8 @@ void ParticleFilter::removeParticlesOnChance(){
 }
 
 void ParticleFilter::calculateParticleChances(){
-    double magicNumber = 40000;
-    double minimumChance = 10;
+    double magicNumber = 20000;
+    double minimumChance = 20;
 
     for(Particle& particle : particles){
         if(particle.comparisonValue < 0){
@@ -89,7 +88,12 @@ void ParticleFilter::calculateParticleChances(){
             if(particle.comparisonValue > magicNumber){
                 particle.comparisonValue = magicNumber;
             }
-            particle.particleChance = (100.0 + minimumChance) - (particle.comparisonValue / magicNumber * 100.0);
+
+            particle.particleChance = 100.0 - (particle.comparisonValue / magicNumber * 100.0);
+
+            if(particle.particleChance > 0){
+                particle.particleChance += minimumChance;
+            }
         }
     }
 }

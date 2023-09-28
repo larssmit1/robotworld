@@ -99,7 +99,10 @@ namespace View
 			drawLidar( dc);
 		}
 
-		drawParticles( dc);
+		if(Application::MainApplication::getSettings().getDrawParticles())
+		{
+			drawParticles( dc);
+		}
 	}
 	/**
 	 *
