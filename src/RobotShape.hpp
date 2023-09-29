@@ -156,7 +156,15 @@ namespace View
 			/**
 			 * 
 			 */
-			void drawParticles (wxDC& dc);
+			void drawParticles( wxDC& dc);
+			/**
+			 * 
+			 */
+			void drawKalmanRoute( wxDC& dc);
+			/**
+			 * 
+			 */
+			void drawParticleFilterRoute( wxDC& dc);
 	};
 } // namespace View
 #endif // ROBOTSHAPE_HPP_

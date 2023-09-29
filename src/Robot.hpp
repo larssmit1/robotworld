@@ -215,6 +215,13 @@ namespace Model
 				return path;
 			}
 			/**
+			 *
+			 */
+			std::vector<Particle> getParticles() const
+			{
+				return particlefilter.getParticles();
+			}
+			/**
 			 * @name Messaging::MessageHandler functions
 			 */
 			//@{
@@ -276,10 +283,8 @@ namespace Model
 			//@}
 
 			std::vector<wxPoint> passedPoints; // The points the robot passed while moving
-
-			Kalman kalmanfilter; // The object in which the kalman calculations are done
-
-			ParticleFilter particlefilter; // The object in which the particle filter calculations are done
+			std::vector<wxPoint> kalmanRoute; // The route the robot has driven according to the kalmanfilter
+			std::vector<wxPoint> particleFilterRoute; // The route the robot has driven according to the particlefilter
 
 		protected:
 			/**
@@ -359,6 +364,14 @@ namespace Model
 			 *
 			 */
 			Messaging::ServerPtr server;
+			/**
+			 *
+			 */
+			Kalman kalmanfilter; // The object in which the kalman calculations are done
+			/**
+			 *
+			 */
+			ParticleFilter particlefilter; // The object in which the particle filter calculations are done
 	};
 } // namespace Model
 #endif // ROBOT_HPP_

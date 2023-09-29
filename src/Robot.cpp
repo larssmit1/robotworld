@@ -46,8 +46,6 @@ namespace Model
 								orientation(0),
 								distanceTraveled(0),
 								lastDistanceTraveled(0),
-								kalmanfilter(aPosition.x, aPosition.y, 90),
-								particlefilter(1000, 1024, 1024),
 								name( aName),
 								size( wxDefaultSize),
 								position( aPosition),
@@ -56,7 +54,9 @@ namespace Model
 								pathSpacing(wxSize(15, 5)),
 								acting(false),
 								driving(false),
-								communicating(false)
+								communicating(false),
+								kalmanfilter(aPosition.x, aPosition.y, 90),
+								particlefilter(1000, 1024, 1024, aPosition)
 	{
 		std::shared_ptr<AbstractSensor> laserSensor = std::make_shared<LaserDistanceSensor>(*this);
 		attachSensor(laserSensor);
@@ -474,12 +474,12 @@ namespace Model
 
 				double xDiff, yDiff, angleDiff;
 
+				wxPoint kalmanPos(static_cast<int>(round(kalmanfilter.getStateVector().at(0,0))), static_cast<int>(round(kalmanfilter.getStateVector().at(1,0))));
+				double kalmanAngle = kalmanfilter.getStateVector().at(2,0);
+
 				if(robotDriveMode == KALMAN){
 					// TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
 					// Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());
-
-					wxPoint kalmanPos(static_cast<int>(round(kalmanfilter.getStateVector().at(0,0))), static_cast<int>(round(kalmanfilter.getStateVector().at(1,0))));
-					double kalmanAngle = kalmanfilter.getStateVector().at(2,0);
 
 					xDiff = vertex.x - kalmanPos.x;
 					yDiff = vertex.y - kalmanPos.y;
@@ -501,6 +501,8 @@ namespace Model
 				}
 
 				passedPoints.push_back(position);
+				kalmanRoute.push_back(kalmanPos);
+				particleFilterRoute.push_back(particlefilter.getPosition());
 
 				// particlefilter update
 				particlefilter.actionUpdate(static_cast<int>(xDiff), static_cast<int>(yDiff));

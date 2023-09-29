@@ -10,8 +10,8 @@
 #include <iostream>
 #include <cmath>
 
-ParticleFilter::ParticleFilter(unsigned int aParticleCount, unsigned int aWorldWidth, unsigned int aWorldHeight)
-: particleCount(aParticleCount), worldWidth(aWorldWidth), worldHeight(aWorldHeight)
+ParticleFilter::ParticleFilter(unsigned int aParticleCount, unsigned int aWorldWidth, unsigned int aWorldHeight, const wxPoint& startPosition)
+: particleCount(aParticleCount), worldWidth(aWorldWidth), worldHeight(aWorldHeight), currentPosition(startPosition)
 {
     addRandomParticles(particleCount);
 }
@@ -22,6 +22,7 @@ void ParticleFilter::measurementUpdate(const Model::Stimuli& lidarValues){
     compareParticlesToLidar(lidarValues);
     calculateParticleChances();
     removeParticlesOnChance();
+    determinePosition();
 }
 
 void ParticleFilter::actionUpdate(int xDiff, int yDiff){
@@ -29,7 +30,11 @@ void ParticleFilter::actionUpdate(int xDiff, int yDiff){
     addRandomParticles(static_cast<unsigned int>(particleCount - particles.size()));
 }
 
-std::vector<Particle> ParticleFilter::getParticles() const{
+wxPoint ParticleFilter::getPosition() const {
+    return currentPosition;
+}
+
+std::vector<Particle> ParticleFilter::getParticles() const {
     return particles;
 }
 
@@ -104,3 +109,38 @@ void ParticleFilter::moveParticles(int xDiff, int yDiff){
         particle.location.y += yDiff;
     }
 }
+
+void ParticleFilter::determinePosition(){
+    int particleRange = 50;
+    std::vector<Particle> inRangeParticles;
+
+    for(Particle particle : particles){
+        if(particle.location.x - currentPosition.x < particleRange){
+            if(particle.location.y - currentPosition.y < particleRange){
+                inRangeParticles.push_back(particle);
+            }
+        }
+    }
+
+    Particle mostSimilarParticle;
+    if(inRangeParticles.size() > 0){
+        mostSimilarParticle = inRangeParticles[0];
+
+        for(Particle& particle : inRangeParticles){
+            if(particle.comparisonValue < mostSimilarParticle.comparisonValue){
+                mostSimilarParticle = particle;
+            }
+        }
+    } else {
+        mostSimilarParticle = particles[0];
+
+        for(Particle particle : particles){
+            if(particle.comparisonValue < mostSimilarParticle.comparisonValue){
+                mostSimilarParticle = particle;
+            }
+        }
+    }
+
+    currentPosition = mostSimilarParticle.location;
+}
+
