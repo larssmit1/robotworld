@@ -474,12 +474,9 @@ namespace Model
 
 				double xDiff, yDiff, angleDiff;
 
-				wxPoint kalmanPos(static_cast<int>(round(kalmanfilter.getStateVector().at(0,0))), static_cast<int>(round(kalmanfilter.getStateVector().at(1,0))));
-				double kalmanAngle = kalmanfilter.getStateVector().at(2,0);
-
 				if(robotDriveMode == KALMAN){
-					// TODO: several values are rounded in this part, it should be checked whether this can create problems in extreme cases.
-					// Application::Logger::log(std::string(": initial_matrix ") + kalmanfilter.getStateVector().to_string());
+					wxPoint kalmanPos(static_cast<int>(round(kalmanfilter.getStateVector().at(0,0))), static_cast<int>(round(kalmanfilter.getStateVector().at(1,0))));
+					double kalmanAngle = kalmanfilter.getStateVector().at(2,0);
 
 					xDiff = vertex.x - kalmanPos.x;
 					yDiff = vertex.y - kalmanPos.y;
@@ -501,8 +498,6 @@ namespace Model
 				}
 
 				passedPoints.push_back(position);
-				kalmanRoute.push_back(kalmanPos);
-				particleFilterRoute.push_back(particlefilter.getPosition());
 
 				// particlefilter update
 				particlefilter.actionUpdate(static_cast<int>(xDiff), static_cast<int>(yDiff));
@@ -511,7 +506,6 @@ namespace Model
 				Matrix<double, 3, 1> updateMatrix{xDiff, yDiff, angleDiff};
 				kalmanfilter.controlUpdate(updateMatrix);
 				kalmanfilter.calculateKalmanGain();
-				// Application::Logger::log(std::string(": update_matrix ") + updateMatrix.to_string());
 
 				// Do the measurements / handle all percepts
 				// TODO There are race conditions here:
@@ -568,10 +562,16 @@ namespace Model
 				Matrix<double, 3, 1> measurementVector{measuredX, measuredY, measuredAngle};
 				kalmanfilter.measurementUpdate(measurementVector);
 				lastDistanceTraveled = distanceTraveled;
-				// Application::Logger::log(std::string(": measurement_matrix ") + measurementVector.to_string());
+				kalmanRoute.push_back(wxPoint(
+					static_cast<int>(round(kalmanfilter.getStateVector().at(0,0))),
+					static_cast<int>(round(kalmanfilter.getStateVector().at(1,0))))
+				);
 
 				// particlefilter measurement update
-				particlefilter.measurementUpdate(currentLidarStimuli);
+				if(currentLidarStimuli.size() > 0){
+					particlefilter.measurementUpdate(currentLidarStimuli);
+					particleFilterRoute.push_back(particlefilter.getPosition());
+				}
 
 				// Stop on arrival or collision
 				if (arrived(goal) || collision())

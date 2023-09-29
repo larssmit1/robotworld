@@ -105,11 +105,11 @@ namespace View
 		}
 
 		if(Application::MainApplication::getSettings().getDrawKalmanRoute()){
-			drawKalmanRoute( dc);
+			drawRoute( dc, getRobot()->kalmanRoute, "YELLOW");
 		}
 
 		if(Application::MainApplication::getSettings().getDrawParticleFilterRoute()){
-			drawParticleFilterRoute( dc);
+			drawRoute( dc, getRobot()->particleFilterRoute, "BROWN");
 		}
 	}
 	/**
@@ -307,29 +307,14 @@ namespace View
 	/**
 	 *
 	 */
-	void RobotShape::drawKalmanRoute(wxDC& dc)
+	void RobotShape::drawRoute(wxDC& dc, const std::vector<wxPoint>& route, const wxColour& color)
 	{
-		std::vector<wxPoint> points = getRobot()->kalmanRoute;
+		std::vector<wxPoint> points = route;
 		if(points.size() > 1)
 		{
 			for(unsigned int i = 0; i < points.size() - 1; i++)
 			{
-				dc.SetPen( wxPen(  "YELLOW", 1, wxPENSTYLE_SOLID));
-				dc.DrawLine(points[i], points[i+1]);
-			}
-		}
-	}
-	/**
-	 *
-	 */
-	void RobotShape::drawParticleFilterRoute(wxDC& dc)
-	{
-		std::vector<wxPoint> points = getRobot()->particleFilterRoute;
-		if(points.size() > 1)
-		{
-			for(unsigned int i = 0; i < points.size() - 1; i++)
-			{
-				dc.SetPen( wxPen(  "BROWN", 1, wxPENSTYLE_SOLID));
+				dc.SetPen(wxPen(color, 1, wxPENSTYLE_SOLID));
 				dc.DrawLine(points[i], points[i+1]);
 			}
 		}

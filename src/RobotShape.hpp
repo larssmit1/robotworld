@@ -160,11 +160,7 @@ namespace View
 			/**
 			 * 
 			 */
-			void drawKalmanRoute( wxDC& dc);
-			/**
-			 * 
-			 */
-			void drawParticleFilterRoute( wxDC& dc);
+			void drawRoute( wxDC& dc, const std::vector<wxPoint>& route, const wxColour& color);
 	};
 } // namespace View
 #endif // ROBOTSHAPE_HPP_
