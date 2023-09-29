@@ -29,6 +29,16 @@ ConfigData ConfigReader::readConfig(){
             iss >> cd.beamAngleLidar;
         } else if(initialString == "beamlength_lidar:"){
             iss >> cd.beamLengthLidar;
+        } else if(initialString == "x_spacing_robot:"){
+            iss >> cd.xSpacingRobot;
+        } else if(initialString == "y_spacing_robot:"){
+            iss >> cd.ySpacingRobot;
+        } else if(initialString == "max_particle_diff:"){
+            iss >> cd.maxParticleDifference;
+        } else if(initialString == "min_particle_chance:"){
+            iss >> cd.minParticleChance;
+        } else if(initialString == "particle_range:"){
+            iss >> cd.particleRange;
         }
     }
 
@@ -93,7 +103,14 @@ std::vector<WorldConfigData> ConfigReader::readWorldConfig(){
 void ConfigReader::printConfig(const ConfigData& cd){
     std::cout << "stddevCompass: " << cd.stddevCompass << std::endl
     << "stddevOdometer: " << cd.stddevOdometer << std::endl
-    << "stddevLidar: " << cd.stddevLidar << std::endl << std::endl;
+    << "stddevLidar: " << cd.stddevLidar << std::endl
+    << "beamAngleLidar: " << cd.beamAngleLidar << std::endl
+    << "beamLengthLidar: " << cd.beamLengthLidar << std::endl
+    << "xSpacingRobot: " << cd.xSpacingRobot << std::endl
+    << "ySpacingRobot: " << cd.ySpacingRobot << std::endl
+    << "maxParticleDifference: " << cd.maxParticleDifference << std::endl
+    << "minParticleChance: " << cd.minParticleChance << std::endl
+    << "particleRange: " << cd.particleRange << std::endl << std::endl;
 }
 
 void ConfigReader::printWorldConfig(const WorldConfigData& wcd){

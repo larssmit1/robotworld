@@ -51,7 +51,10 @@ namespace Model
 								position( aPosition),
 								front( 0, 0),
 								speed( 0.0),
-								pathSpacing(wxSize(15, 5)),
+								pathSpacing(wxSize(
+									Application::MainApplication::getSettings().getConfiguration().xSpacingRobot,
+									Application::MainApplication::getSettings().getConfiguration().ySpacingRobot)
+								),
 								acting(false),
 								driving(false),
 								communicating(false),

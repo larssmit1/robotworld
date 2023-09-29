@@ -2,12 +2,12 @@
 
 #include "Shape2DUtils.hpp"
 #include "MathUtils.hpp"
+#include "Logger.hpp"
 #include "Wall.hpp"
 #include "RobotWorld.hpp"
 #include "MainApplication.hpp"
 
 #include <random>
-#include <iostream>
 #include <cmath>
 
 ParticleFilter::ParticleFilter(unsigned int aParticleCount, unsigned int aWorldWidth, unsigned int aWorldHeight, const wxPoint& startPosition)
@@ -60,7 +60,7 @@ void ParticleFilter::compareParticlesToLidar(const Model::Stimuli& lidarValues){
             if(particleLidarValues[i].angle == lidarValues[i].angle){
                 particle.comparisonValue += sqrt(pow(lidarValues[i].distance - particleLidarValues[i].distance, 2));
             } else {
-                std::cout << "lidar values are for different angles, can't compare these." << std::endl;
+                Application::Logger::log("lidar values are for different angles, can't compare these.");
                 particle.comparisonValue = -1;
                 break;
             }
@@ -83,18 +83,18 @@ void ParticleFilter::removeParticlesOnChance(){
 }
 
 void ParticleFilter::calculateParticleChances(){
-    double magicNumber = 20000;
-    double minimumChance = 20;
+    double maxParticleDiff = Application::MainApplication::getSettings().getConfiguration().maxParticleDifference;
+    double minimumChance = Application::MainApplication::getSettings().getConfiguration().minParticleChance;
 
     for(Particle& particle : particles){
         if(particle.comparisonValue < 0){
             particle.particleChance = 0;
         } else {
-            if(particle.comparisonValue > magicNumber){
-                particle.comparisonValue = magicNumber;
+            if(particle.comparisonValue > maxParticleDiff){
+                particle.comparisonValue = maxParticleDiff;
             }
 
-            particle.particleChance = 100.0 - (particle.comparisonValue / magicNumber * 100.0);
+            particle.particleChance = 100.0 - (particle.comparisonValue / maxParticleDiff * 100.0);
 
             if(particle.particleChance > 0){
                 particle.particleChance += minimumChance;
@@ -111,7 +111,7 @@ void ParticleFilter::moveParticles(int xDiff, int yDiff){
 }
 
 void ParticleFilter::determinePosition(){
-    int particleRange = 50;
+    int particleRange = Application::MainApplication::getSettings().getConfiguration().particleRange;
     std::vector<Particle> inRangeParticles;
 
     for(Particle particle : particles){

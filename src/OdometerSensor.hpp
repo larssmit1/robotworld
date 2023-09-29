@@ -53,7 +53,7 @@ namespace Model
 		protected:
 		private:
 			/**
-			 * Standard deviation of the odometer per 10 pixels
+			 * Standard deviation of the odometer for each 10 pixels
 			 */
 			double stddev;
 			/**

@@ -105,7 +105,7 @@ namespace View
 		}
 
 		if(Application::MainApplication::getSettings().getDrawKalmanRoute()){
-			drawRoute( dc, getRobot()->kalmanRoute, "YELLOW");
+			drawRoute( dc, getRobot()->kalmanRoute, "BLUE");
 		}
 
 		if(Application::MainApplication::getSettings().getDrawParticleFilterRoute()){

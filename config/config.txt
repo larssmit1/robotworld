@@ -3,3 +3,8 @@ stddev_odometer: 1
 stddev_lidar: 10
 beamangle_lidar: 2
 beamlength_lidar: 1024
+x_spacing_robot: 15
+y_spacing_robot: 5
+max_particle_diff: 20000
+min_particle_chance: 20
+particle_range: 50
