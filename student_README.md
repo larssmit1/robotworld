@@ -4,11 +4,25 @@ This is an extra README which contains some extra information about the implemen
 Building and Running the software
 ---------------------------------
 
+**Building:**
+
 Building the software works in the same way as the original software.
 
-When it comes to running the software I would recommend, however, to use "bash run.sh" in the scripts folder to
-run the software. When not doing this there might be issues when it comes to finding the config files. This can be
+**Running:**
+
+When it comes to running the software I would recommend, however, to navigate to the scripts folder and use "bash run.sh" 
+to run the software. When not doing this there might be issues when it comes to finding the config files. This can be
 solved by changing the paths in "ConfigReader.cpp" and rebuilding the software, but is not recommended.
+
+
+Comparing changes
+------------------
+
+the original pull request with the majority of the changes can be found here:
+https://github.com/larssmit1/robotworld/commit/ef59d7fc5730b18fe448dbb3eee0747403fa6f46
+
+it's also possible to compare the master branch with the "original-robotworld" branch
+to easily compare changes.
 
 
 Configs
@@ -34,16 +48,17 @@ afterwards taking the second part seperated by a space and assigning this second
 possible. Everything after the first two parts seperated by spaces should be ignored.
 
 **Options:**
-    "stddev_compass:" -> The standard deviation of the compass.
-    "stddev_odometer:" -> The standard deviation of the odometer.
-    "stddev_lidar:" -> The standard deviation of the lidar.
-    "beamangle_lidar:" -> The angle between the beams of the lidar.
-    "beamlength_lidar:" -> The length of the beams of the lidar.
-    "x_spacing_robot:" -> Extra spacing when it comes to width, which the robot keeps when calculating a path.
-    "y_spacing_robot:" -> Extra spacing when it comes to height, which the robot keeps when calculating a path.
-    "max_particle_diff:" -> The maximum difference a particle can have compared to the lidar to have a chance to reappear.
-    "min_particle_chance:" -> The minimum chance a particle which is similar to the measurement has to reappear.
-    "particle_range:" -> The maximum range a particle can be from the previoussly determined position of the robot, to be considered valid.
+
+    - "stddev_compass:" -> The standard deviation of the compass.
+    - "stddev_odometer:" -> The standard deviation of the odometer.
+    - "stddev_lidar:" -> The standard deviation of the lidar.
+    - "beamangle_lidar:" -> The angle between the beams of the lidar.
+    - "beamlength_lidar:" -> The length of the beams of the lidar.
+    - "x_spacing_robot:" -> Extra spacing when it comes to width, which the robot keeps when calculating a path.
+    - "y_spacing_robot:" -> Extra spacing when it comes to height, which the robot keeps when calculating a path.
+    - "max_particle_diff:" -> The maximum difference a particle can have compared to the lidar to have a chance to reappear.
+    - "min_particle_chance:" -> The minimum chance a particle which is similar to the measurement has to reappear.
+    - "particle_range:" -> The maximum range a particle can be from the previoussly determined position of the robot, to be considered valid.
 
 ### worldconfig.txt
 
