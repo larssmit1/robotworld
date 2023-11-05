@@ -5,9 +5,11 @@ Building and Running the software
 ---------------------------------
 
 **Building:**
+
 Building the software works in the same way as the original software.
 
 **Running:**
+
 When it comes to running the software I would recommend, however, to navigate to the scripts folder and use "bash run.sh" 
 to run the software. When not doing this there might be issues when it comes to finding the config files. This can be
 solved by changing the paths in "ConfigReader.cpp" and rebuilding the software, but is not recommended.
@@ -36,6 +38,7 @@ afterwards taking the second part seperated by a space and assigning this second
 possible. Everything after the first two parts seperated by spaces should be ignored.
 
 **Options:**
+
     * "stddev_compass:" -> The standard deviation of the compass.
     * "stddev_odometer:" -> The standard deviation of the odometer.
     * "stddev_lidar:" -> The standard deviation of the lidar.
