@@ -39,16 +39,16 @@ possible. Everything after the first two parts seperated by spaces should be ign
 
 **Options:**
 
-    * "stddev_compass:" -> The standard deviation of the compass.
-    * "stddev_odometer:" -> The standard deviation of the odometer.
-    * "stddev_lidar:" -> The standard deviation of the lidar.
-    * "beamangle_lidar:" -> The angle between the beams of the lidar.
-    * "beamlength_lidar:" -> The length of the beams of the lidar.
-    * "x_spacing_robot:" -> Extra spacing when it comes to width, which the robot keeps when calculating a path.
-    * "y_spacing_robot:" -> Extra spacing when it comes to height, which the robot keeps when calculating a path.
-    * "max_particle_diff:" -> The maximum difference a particle can have compared to the lidar to have a chance to reappear.
-    * "min_particle_chance:" -> The minimum chance a particle which is similar to the measurement has to reappear.
-    * "particle_range:" -> The maximum range a particle can be from the previoussly determined position of the robot, to be considered valid.
+    - "stddev_compass:" -> The standard deviation of the compass.
+    - "stddev_odometer:" -> The standard deviation of the odometer.
+    - "stddev_lidar:" -> The standard deviation of the lidar.
+    - "beamangle_lidar:" -> The angle between the beams of the lidar.
+    - "beamlength_lidar:" -> The length of the beams of the lidar.
+    - "x_spacing_robot:" -> Extra spacing when it comes to width, which the robot keeps when calculating a path.
+    - "y_spacing_robot:" -> Extra spacing when it comes to height, which the robot keeps when calculating a path.
+    - "max_particle_diff:" -> The maximum difference a particle can have compared to the lidar to have a chance to reappear.
+    - "min_particle_chance:" -> The minimum chance a particle which is similar to the measurement has to reappear.
+    - "particle_range:" -> The maximum range a particle can be from the previoussly determined position of the robot, to be considered valid.
 
 ### worldconfig.txt
 
