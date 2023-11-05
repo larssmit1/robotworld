@@ -4,6 +4,9 @@
 #include "CommunicationService.hpp"
 #include "Goal.hpp"
 #include "LaserDistanceSensor.hpp"
+#include "LidarSensor.hpp"
+#include "CompassSensor.hpp"
+#include "OdometerSensor.hpp"
 #include "Logger.hpp"
 #include "MainApplication.hpp"
 #include "MathUtils.hpp"
@@ -19,6 +22,7 @@
 #include <ctime>
 #include <sstream>
 #include <thread>
+#include <cmath>
 
 namespace Model
 {
@@ -39,17 +43,35 @@ namespace Model
 	 */
 	Robot::Robot(	const std::string& aName,
 					const wxPoint& aPosition) :
+								orientation(0),
+								distanceTraveled(0),
+								lastDistanceTraveled(0),
 								name( aName),
 								size( wxDefaultSize),
 								position( aPosition),
 								front( 0, 0),
 								speed( 0.0),
+								pathSpacing(wxSize(
+									Application::MainApplication::getSettings().getConfiguration().xSpacingRobot,
+									Application::MainApplication::getSettings().getConfiguration().ySpacingRobot)
+								),
 								acting(false),
 								driving(false),
-								communicating(false)
+								communicating(false),
+								kalmanfilter(aPosition.x, aPosition.y, 90),
+								particlefilter(1000, 1024, 1024, aPosition)
 	{
-		std::shared_ptr< AbstractSensor > laserSensor = std::make_shared<LaserDistanceSensor>( *this);
-		attachSensor( laserSensor);
+		std::shared_ptr<AbstractSensor> laserSensor = std::make_shared<LaserDistanceSensor>(*this);
+		attachSensor(laserSensor);
+
+		std::shared_ptr<AbstractSensor> lidarSensor = std::make_shared<LidarSensor>(*this);
+		attachSensor(lidarSensor);
+
+		std::shared_ptr<CompassSensor> compassSensor = std::make_shared<CompassSensor>(*this);
+		attachSensor(compassSensor);
+
+		std::shared_ptr<OdometerSensor> odometerSensor = std::make_shared<OdometerSensor>(*this);
+		attachSensor(odometerSensor);
 
 		// We use the real position for starters, not an estimated position.
 		startPosition = position;
@@ -447,13 +469,46 @@ namespace Model
 			startPosition = position;
 
 			unsigned pathPoint = 0;
-			while (position.x > 0 && position.x < 500 && position.y > 0 && position.y < 500 && pathPoint < path.size()) // @suppress("Avoid magic numbers")
+			while (position.x > 0 && position.x < 1024 && position.y > 0 && position.y < 1024 && pathPoint < path.size()) // @suppress("Avoid magic numbers")
 			{
 				// Do the update
+				RobotDriveMode robotDriveMode = Application::MainApplication::getSettings().getRobotDriveMode();
 				const PathAlgorithm::Vertex& vertex = path[pathPoint+=static_cast<unsigned int>(speed)];
-				front = BoundedVector( vertex.asPoint(), position);
-				position.x = vertex.x;
-				position.y = vertex.y;
+
+				double xDiff, yDiff, angleDiff;
+
+				if(robotDriveMode == KALMAN){
+					wxPoint kalmanPos(static_cast<int>(round(kalmanfilter.getStateVector().at(0,0))), static_cast<int>(round(kalmanfilter.getStateVector().at(1,0))));
+					double kalmanAngle = kalmanfilter.getStateVector().at(2,0);
+
+					xDiff = vertex.x - kalmanPos.x;
+					yDiff = vertex.y - kalmanPos.y;
+					angleDiff = Utils::Shape2DUtils::getAngle(front) * 180 / Utils::PI - kalmanAngle;
+
+					front = BoundedVector(vertex.asPoint(), kalmanPos);
+					position.x += static_cast<int>(std::round(xDiff));
+					position.y += static_cast<int>(std::round(yDiff));
+				} else { // DEFAULT
+					xDiff = vertex.x - position.x;
+					yDiff = vertex.y - position.y;
+					angleDiff = (Utils::Shape2DUtils::getAngle(front) -
+						Utils::Shape2DUtils::getAngle(BoundedVector(vertex.asPoint(), position))) *
+						180 / Utils::PI;
+					
+					front = BoundedVector(vertex.asPoint(), position);
+					position.x = vertex.x;
+					position.y = vertex.y;
+				}
+
+				passedPoints.push_back(position);
+
+				// particlefilter update
+				particlefilter.actionUpdate(static_cast<int>(xDiff), static_cast<int>(yDiff));
+
+				// kalmanfilter update
+				Matrix<double, 3, 1> updateMatrix{xDiff, yDiff, angleDiff};
+				kalmanfilter.controlUpdate(updateMatrix);
+				kalmanfilter.calculateKalmanGain();
 
 				// Do the measurements / handle all percepts
 				// TODO There are race conditions here:
@@ -468,11 +523,28 @@ namespace Model
 						// warning: expression with side effects will be evaluated despite being used as an operand to 'typeid'
 						const AbstractPercept& tempAbstractPercept{*percept.value().get()};
 
-						if( typeid(tempAbstractPercept) == typeid(DistancePercept)) // single percept, this comes from the laser
+						if(typeid(tempAbstractPercept) == typeid(DistancePercept)) // single percept, this comes from the laser
 						{
 							DistancePercept* distancePercept = dynamic_cast<DistancePercept*>(percept.value().get());
 							currentRadarPointCloud.push_back(*distancePercept);
-						}else
+						}
+						else if(typeid(tempAbstractPercept) == typeid(DistancePercepts))
+						{
+							DistancePercepts* distancePercepts = dynamic_cast<DistancePercepts*>(percept.value().get());
+							currentLidarPointcloud = distancePercepts->pointCloud;
+							currentLidarStimuli = distancePercepts->stimuli;
+						}
+						else if(typeid(tempAbstractPercept) == typeid(OrientationPercept))
+						{
+							OrientationPercept* orientationPercept = dynamic_cast<OrientationPercept*>(percept.value().get());
+							orientation = orientationPercept->orientation;
+						}
+						else if(typeid(tempAbstractPercept) == typeid(MileagePercept))
+						{
+							MileagePercept* mileagePercept = dynamic_cast<MileagePercept*>(percept.value().get());
+							distanceTraveled = mileagePercept->totalDistance;
+						}
+						else
 						{
 							Application::Logger::log(std::string("Unknown type of percept:") + typeid(tempAbstractPercept).name());
 						}
@@ -483,6 +555,26 @@ namespace Model
 				}
 
 				// Update the belief
+				// kalmanfilter measurement update
+				double measuredAngle = orientation;
+				double measuredX = kalmanfilter.getStateVector().at(0,0) + (distanceTraveled - lastDistanceTraveled)
+									* std::cos(measuredAngle * (Utils::PI / 180));
+				double measuredY = kalmanfilter.getStateVector().at(1,0) + (distanceTraveled - lastDistanceTraveled)
+									* std::sin(measuredAngle * (Utils::PI / 180));
+
+				Matrix<double, 3, 1> measurementVector{measuredX, measuredY, measuredAngle};
+				kalmanfilter.measurementUpdate(measurementVector);
+				lastDistanceTraveled = distanceTraveled;
+				kalmanRoute.push_back(wxPoint(
+					static_cast<int>(round(kalmanfilter.getStateVector().at(0,0))),
+					static_cast<int>(round(kalmanfilter.getStateVector().at(1,0))))
+				);
+
+				// particlefilter measurement update
+				if(currentLidarStimuli.size() > 0){
+					particlefilter.measurementUpdate(currentLidarStimuli);
+					particleFilterRoute.push_back(particlefilter.getPosition());
+				}
 
 				// Stop on arrival or collision
 				if (arrived(goal) || collision())
@@ -532,7 +624,7 @@ namespace Model
 
 			front = BoundedVector( aGoal->getPosition(), position);
 			//handleNotificationsFor( astar);
-			path = astar.search( position, aGoal->getPosition(), size);
+			path = astar.search( position, aGoal->getPosition(), size + pathSpacing);
 			//stopHandlingNotificationsFor( astar);
 
 			Application::Logger::setDisable( false);

@@ -7,3 +7,6 @@
 /docs/generated
 /configure~
 /RobotWorld.cppcheck
+/personal_scripts
+/linux-build
+/.vscode

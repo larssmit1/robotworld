@@ -87,8 +87,13 @@ namespace Application
 
 			wxPanel* configPanel;
 			wxCheckBox* drawOpenSetCheckbox;
+			wxCheckBox* drawLidarCheckbox;
+			wxCheckBox* drawParticlesCheckbox;
+			wxCheckBox* drawKalmanRouteCheckbox;
+			wxCheckBox* drawParticleFilterRouteCheckbox;
 			wxSpinCtrl* speedSpinCtrl;
 			wxRadioBox* worldNumber;
+			wxRadioBox* driveNumber;
 
 			wxPanel* buttonPanel;
 
@@ -99,10 +104,13 @@ namespace Application
 			void OnAbout( wxCommandEvent& anEvent);
 
 			void OnDrawOpenSet( wxCommandEvent& anEvent);
+			void OnDrawLidar( wxCommandEvent& anEvent);
+			void OnDrawParticles( wxCommandEvent& anEvent);
+			void OnDrawKalmanRoute( wxCommandEvent& anEvent);
+			void OnDrawParticleFilterRoute( wxCommandEvent& anEvent);
 			void OnSpeedSpinCtrlUpdate( wxCommandEvent& anEvent);
-			void OnWorld1( wxCommandEvent& anEvent);
-			void OnWorld2( wxCommandEvent& anEvent);
-			void OnWorld3( wxCommandEvent& anEvent);
+			void OnWorld( wxCommandEvent& anEvent);
+			void OnMode( wxCommandEvent& anEvent);
 
 			void OnStartRobot( wxCommandEvent& anEvent);
 			void OnStopRobot( wxCommandEvent& anEvent);

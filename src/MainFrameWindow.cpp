@@ -183,7 +183,7 @@ namespace Application
 					wxGBPosition( 1, 1),
 					wxGBSpan( 1, 1),
 					wxSHRINK);
-		robotWorldCanvas->SetMinSize( wxSize( 500,500));
+		robotWorldCanvas->SetMinSize( wxSize(1024, 1024));
 
 		sizer->Add( 5, 5,
 					wxGBPosition( 2, 2),
@@ -261,7 +261,7 @@ namespace Application
 					wxGBSpan( 1, 1),
 					wxSHRINK);
 
-		std::array<std::string,3> choicesArray
+		std::vector<std::string> choicesVector
 		{
 			"Window",
 			"StdOut",
@@ -269,7 +269,7 @@ namespace Application
 		};
 
 		sizer->Add(	logDestination = makeRadiobox(	panel,
-													choicesArray,
+													choicesVector,
 													[this](wxCommandEvent& event)
 													{
 														wxRadioBox* radiobox = dynamic_cast< wxRadioBox* >(event.GetEventObject());
@@ -356,69 +356,100 @@ namespace Application
 					wxGBSpan( 1, 1),
 					wxSHRINK | wxALIGN_CENTRE);
 
+		sizer->Add( drawLidarCheckbox = Application::makeCheckbox( panel,
+																	 "Draw lidar",
+																	 [this]( wxCommandEvent& event){this-> OnDrawLidar(event);}),
+					wxGBPosition( 1, 2),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTRE);
+		
+		sizer->Add( drawParticlesCheckbox = Application::makeCheckbox( panel,
+																	 "Draw particles",
+																	 [this]( wxCommandEvent& event){this-> OnDrawParticles(event);}),
+					wxGBPosition( 1, 3),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTRE);
+		
+		sizer->Add( drawKalmanRouteCheckbox = Application::makeCheckbox( panel,
+																	 "Draw Kalman route",
+																	 [this]( wxCommandEvent& event){this-> OnDrawKalmanRoute(event);}),
+					wxGBPosition( 2, 1),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTRE);
+
+		sizer->Add( drawParticleFilterRouteCheckbox = Application::makeCheckbox( panel,
+																	 "Draw particle filter route",
+																	 [this]( wxCommandEvent& event){this-> OnDrawParticleFilterRoute(event);}),
+					wxGBPosition( 2, 2),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTRE);
+
 		/////// Speed
 		sizer->Add(new wxStaticText(panel,
 									wxID_ANY,
 									"Speed"),
-				   wxGBPosition( 2, 1),
+				   wxGBPosition( 3, 1),
 				   wxGBSpan( 1, 1),
 				   wxSHRINK | wxALIGN_CENTER);
 		sizer->Add(speedSpinCtrl = new wxSpinCtrl(panel,
 												  wxID_ANY),
-				   wxGBPosition( 2, 2),
+				   wxGBPosition( 3, 2),
 				   wxGBSpan( 1, 1),
 				   wxSHRINK | wxALIGN_CENTER);
 		speedSpinCtrl->SetValue(static_cast<int>(10));
 		speedSpinCtrl->Bind(wxEVT_COMMAND_SPINCTRL_UPDATED,[this](wxCommandEvent& event){this->OnSpeedSpinCtrlUpdate(event);});
 
-		std::array<std::string,3> choicesArray
-		{
-			"1 Default world",
-			"2 Student world 1",
-			"3 Student world 2"
-		};
+		std::vector<WorldConfigData> worldConfigurations = MainApplication::getSettings().getWorldConfigurations();
+		std::vector<std::string> choicesVector;
+
+		for(WorldConfigData wcd : worldConfigurations){
+			choicesVector.push_back(wcd.name);
+		}
 
 		sizer->Add(	worldNumber = makeRadiobox(	panel,
-												choicesArray,
+												choicesVector,
 												[this](wxCommandEvent& event)
 												{
 													wxRadioBox* radiobox = dynamic_cast< wxRadioBox* >(event.GetEventObject());
 													if(radiobox)
 													{
-														switch(radiobox->GetSelection())
-														{
-															case 0:
-															{
-																OnWorld1(event);
-																break;
-															}
-															case 1:
-															{
-																OnWorld2(event);
-																break;
-															}
-															case 2:
-															{
-																OnWorld3(event);
-																break;
-															}
-															default:
-															{
-																TRACE_DEVELOP("Unknown world selection");
-															}
-														}
+														OnWorld(event);
 													}
 												},
-												"World number",
+												"World",
 												wxRA_SPECIFY_ROWS),
-					wxGBPosition( 3, 1),
+					wxGBPosition( 4, 1),
+					wxGBSpan( 1, 1),
+					wxSHRINK | wxALIGN_CENTER);
+		sizer->AddGrowableRow( 3);
+		sizer->AddGrowableCol( 1);
+
+		std::vector<std::string> modeChoicesVector
+		{
+			"Default mode",
+			"Kalman filter mode",
+		};
+
+		sizer->Add(	driveNumber = makeRadiobox(	panel,
+												modeChoicesVector,
+												[this](wxCommandEvent& event)
+												{
+													wxRadioBox* radiobox = dynamic_cast< wxRadioBox* >(event.GetEventObject());
+													if(radiobox)
+													{
+														OnMode(event);
+													}
+												},
+												"Robot drive mode",
+												wxRA_SPECIFY_ROWS),
+					wxGBPosition( 4, 2),
 					wxGBSpan( 1, 1),
 					wxSHRINK | wxALIGN_CENTER);
 		sizer->AddGrowableRow( 3);
 		sizer->AddGrowableCol( 1);
 
 		sizer->Add( 5, 5,
-					wxGBPosition( 4, 3),
+					wxGBPosition( 5, 3),
 					wxGBSpan( 1, 1),
 					wxGROW);
 		sizer->AddGrowableCol( 3);
@@ -591,6 +622,38 @@ namespace Application
 	/**
 	 *
 	 */
+	void MainFrameWindow::OnDrawLidar( wxCommandEvent& UNUSEDPARAM(anEvent))
+	{
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setDrawLidar(drawLidarCheckbox->IsChecked());
+	}
+	/**
+	 *
+	 */
+	void MainFrameWindow::OnDrawParticles( wxCommandEvent& UNUSEDPARAM(anEvent))
+	{
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setDrawParticles(drawParticlesCheckbox->IsChecked());
+	}
+	/**
+	 *
+	 */
+	void MainFrameWindow::OnDrawKalmanRoute( wxCommandEvent& UNUSEDPARAM(anEvent))
+	{
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setDrawKalmanRoute(drawKalmanRouteCheckbox->IsChecked());
+	}
+	/**
+	 *
+	 */
+	void MainFrameWindow::OnDrawParticleFilterRoute( wxCommandEvent& UNUSEDPARAM(anEvent))
+	{
+		MainSettings& mainSettings = MainApplication::getSettings();
+		mainSettings.setDrawParticleFilterRoute(drawParticleFilterRouteCheckbox->IsChecked());
+	}
+	/**
+	 *
+	 */
 	void MainFrameWindow::OnSpeedSpinCtrlUpdate( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
 //		TRACE_DEVELOP(anEvent.GetString().ToStdString());
@@ -606,7 +669,7 @@ namespace Application
 	/**
 	 *
 	 */
-	void MainFrameWindow::OnWorld1( wxCommandEvent& anEvent)
+	void MainFrameWindow::OnWorld( wxCommandEvent& anEvent)
 	{
 		TRACE_DEVELOP(anEvent.GetString().ToStdString());
 
@@ -616,22 +679,12 @@ namespace Application
 	/**
 	 *
 	 */
-	void MainFrameWindow::OnWorld2( wxCommandEvent& anEvent)
+	void MainFrameWindow::OnMode( wxCommandEvent& anEvent)
 	{
 		TRACE_DEVELOP(anEvent.GetString().ToStdString());
 
 		MainSettings& mainSettings = MainApplication::getSettings();
-		mainSettings.setWorldNumber(worldNumber->GetSelection());
-	}
-	/**
-	 *
-	 */
-	void MainFrameWindow::OnWorld3( wxCommandEvent& anEvent)
-	{
-		TRACE_DEVELOP(anEvent.GetString().ToStdString());
-
-		MainSettings& mainSettings = MainApplication::getSettings();
-		mainSettings.setWorldNumber(worldNumber->GetSelection());
+		mainSettings.setRobotDriveMode(driveNumber->GetSelection());
 	}
 	/**
 	 *
@@ -660,39 +713,7 @@ namespace Application
 	 */
 	void MainFrameWindow::OnPopulate( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
-		switch(worldNumber->GetSelection())
-		{
-			case 0:
-			{
-				robotWorldCanvas->populate( 4);
-				// TODO Do something...
-//				std::shared_ptr<View::RobotShape> robotShape = std::dynamic_pointer_cast<View::RobotShape>(robotWorldCanvas->getSelectedShape());
-//				if(robotShape)
-//				{
-//					TRACE_DEVELOP("It should be checked...");
-//					drawOpenSetCheckbox->SetValue(robotShape->getDrawOpenSet());
-//				}else
-//				{
-//					TRACE_DEVELOP("No robotShape? It is not checked...");
-//				}
-				break;
-			}
-			case 1:
-			{
-				TRACE_DEVELOP("Please create your own student world 1");
-				break;
-			}
-			case 2:
-			{
-				TRACE_DEVELOP("Please create your own student world 2");
-				break;
-			}
-			default:
-			{
-				TRACE_DEVELOP("Huh?");
-				break;
-			}
-		}
+		robotWorldCanvas->populate(worldNumber->GetSelection());
 	}
 	/**
 	 *

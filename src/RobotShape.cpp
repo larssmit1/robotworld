@@ -93,6 +93,24 @@ namespace View
 		drawRobot( dc);
 
 		drawLaser( dc);
+
+		if(Application::MainApplication::getSettings().getDrawLidar())
+		{
+			drawLidar( dc);
+		}
+
+		if(Application::MainApplication::getSettings().getDrawParticles())
+		{
+			drawParticles( dc);
+		}
+
+		if(Application::MainApplication::getSettings().getDrawKalmanRoute()){
+			drawRoute( dc, getRobot()->kalmanRoute, "BLUE");
+		}
+
+		if(Application::MainApplication::getSettings().getDrawParticleFilterRoute()){
+			drawRoute( dc, getRobot()->particleFilterRoute, "BROWN");
+		}
 	}
 	/**
 	 *
@@ -257,6 +275,47 @@ namespace View
 			{
 				dc.SetPen( wxPen(  "RED", borderWidth, wxPENSTYLE_SOLID));
 				dc.DrawCircle( d.point, 1);
+			}
+		}
+	}
+	/**
+	 *
+	 */
+	void RobotShape::drawLidar(wxDC& dc)
+	{
+		Model::PointCloud pointcloud = getRobot()->currentLidarPointcloud;
+
+		for(const Model::DistancePercept& percept : pointcloud)
+		{
+			dc.SetPen( wxPen(  "BLUE", 1, wxPENSTYLE_SOLID));
+			dc.DrawLine(centre.x, centre.y, percept.point.x, percept.point.y);
+		}
+	}
+	/**
+	 *
+	 */
+	void RobotShape::drawParticles(wxDC& dc)
+	{
+		std::vector<Particle> particles = getRobot()->getParticles();
+
+		for(const Particle& particle : particles)
+		{
+			dc.SetPen( wxPen(  "GREEN", 1, wxPENSTYLE_SOLID));
+			dc.DrawCircle(particle.location.x, particle.location.y, 1);
+		}
+	}
+	/**
+	 *
+	 */
+	void RobotShape::drawRoute(wxDC& dc, const std::vector<wxPoint>& route, const wxColour& color)
+	{
+		std::vector<wxPoint> points = route;
+		if(points.size() > 1)
+		{
+			for(unsigned int i = 0; i < points.size() - 1; i++)
+			{
+				dc.SetPen(wxPen(color, 1, wxPENSTYLE_SOLID));
+				dc.DrawLine(points[i], points[i+1]);
 			}
 		}
 	}
