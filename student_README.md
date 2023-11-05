@@ -15,6 +15,16 @@ to run the software. When not doing this there might be issues when it comes to 
 solved by changing the paths in "ConfigReader.cpp" and rebuilding the software, but is not recommended.
 
 
+Comparing changes
+------------------
+
+the original pull request with the majority of the changes can be found here:
+https://github.com/larssmit1/robotworld/commit/ef59d7fc5730b18fe448dbb3eee0747403fa6f46
+
+it's also possible to compare the master branch with the "original-robotworld" branch
+to easily compare changes.
+
+
 Configs
 -------
 
